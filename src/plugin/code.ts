@@ -2,86 +2,74 @@
 // You can access browser APIs such as the network by creating a UI which contains
 // a full browser environment (see documentation).
 
-// Runs this code if the plugin is run in Figma
-if (figma.editorType === 'figma') {
-  // This plugin will open a window to prompt the user to enter a number, and
-  // it will then create that many rectangles on the screen.
+async function getFigmaStorageInfo() {
+  console.log('getFigmaStorageInfo')
+  const storageKeys = await figma.clientStorage.keysAsync();
+  const data = storageKeys.reduce(async (acc: any, key) => {
+    acc[key] = await figma.clientStorage.getAsync(key);
+  }, {});
+  figma.ui.postMessage({
+    type: "figma-storage-info-response",
+    data
+  });
+}
 
-  // This shows the HTML page in "ui.html".
-  figma.showUI(__html__);
+async function searchFigmaNodes(query: string) {
+  console.log('searchFigmaNodes')
+  const nodes = figma.currentPage.findAllWithCriteria({
+    types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
+  }).filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
 
-  // Calls to "parent.postMessage" from within the HTML page will trigger this
-  // callback. The callback will be passed the "pluginMessage" property of the
-  // posted message.
-  figma.ui.onmessage = msg => {
-    // One way of distinguishing between different types of messages sent from
-    // your HTML page is to use an object with a "type" property like this.
-    if (msg.type === 'create-shapes') {
-      const nodes: SceneNode[] = [];
-      for (let i = 0; i < msg.count; i++) {
-        const rect = figma.createRectangle();
-        rect.x = i * 150;
-        rect.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-        figma.currentPage.appendChild(rect);
-        nodes.push(rect);
-      }
-      figma.currentPage.selection = nodes;
-      figma.viewport.scrollAndZoomIntoView(nodes);
+  const data = nodes.map(({ id, name, type }) => ({ id, name, type }));
+  figma.ui.postMessage({
+    type: "figma-search-response",
+    data
+  });
+}
+
+function sendCurrentSelection () {
+  const selectedNodes = figma.currentPage.selection.map(({ id }) => {
+    const node =  figma.getNodeById(id);
+    if (!node) return
+    return {
+      id: node.id,
+      name: node.name,
+      type: node.type,
     }
+  }).filter(Boolean)
+  console.log('selectedNodes',selectedNodes)
+  figma.ui.postMessage({
+    type: "selectionchange",
+    data: selectedNodes
+  });
+}
+figma.showUI(__html__, { width: 300, height: 500 }, );
 
-    // Make sure to close the plugin when you're done. Otherwise the plugin will
-    // keep running, which shows the cancel button at the bottom of the screen.
-    figma.closePlugin();
-  };
+// Calls to "parent.postMessage" from within the HTML page will trigger this
+// callback. The callback will be passed the "pluginMessage" property of the
+// posted message.
 
-// If the plugins isn't run in Figma, run this code
-} else {
-  // This plugin will open a window to prompt the user to enter a number, and
-  // it will then create that many shapes and connectors on the screen.
+figma.on("selectionchange", () =>  sendCurrentSelection());
 
-  // This shows the HTML page in "ui.html".
-  figma.showUI(__html__);
-
-  // Calls to "parent.postMessage" from within the HTML page will trigger this
-  // callback. The callback will be passed the "pluginMessage" property of the
-  // posted message.
-  figma.ui.onmessage = msg => {
-    // One way of distinguishing between different types of messages sent from
-    // your HTML page is to use an object with a "type" property like this.
-    if (msg.type === 'create-shapes') {
-      const numberOfShapes = msg.count;
-      const nodes: SceneNode[] = [];
-      for (let i = 0; i < numberOfShapes; i++) {
-        const shape = figma.createShapeWithText();
-        // You can set shapeType to one of: 'SQUARE' | 'ELLIPSE' | 'ROUNDED_RECTANGLE' | 'DIAMOND' | 'TRIANGLE_UP' | 'TRIANGLE_DOWN' | 'PARALLELOGRAM_RIGHT' | 'PARALLELOGRAM_LEFT'
-        shape.shapeType = 'ROUNDED_RECTANGLE'
-        shape.x = i * (shape.width + 200);
-        shape.fills = [{type: 'SOLID', color: {r: 1, g: 0.5, b: 0}}];
-        figma.currentPage.appendChild(shape);
-        nodes.push(shape);
-      };
-
-      for (let i = 0; i < (numberOfShapes - 1); i++) {
-        const connector = figma.createConnector();
-        connector.strokeWeight = 8
-
-        connector.connectorStart = {
-          endpointNodeId: nodes[i].id,
-          magnet: 'AUTO',
-        };
-
-        connector.connectorEnd = {
-          endpointNodeId: nodes[i+1].id,
-          magnet: 'AUTO',
-        };
-      };
-
-      figma.currentPage.selection = nodes;
-      figma.viewport.scrollAndZoomIntoView(nodes);
+figma.ui.onmessage = msg => {
+  // One way of distinguishing between different types of messages sent from
+  // your HTML page is to use an object with a "type" property like this.
+  if (msg.type === 'get-figma-storage-info') {
+    getFigmaStorageInfo()
+  }
+  if (msg.type === 'select-node') {
+    const node = figma.getNodeById(msg.data);
+    if (node) {
+      // @ts-ignore
+      // figma.currentPage.selection = [node];
+      figma.viewport.scrollAndZoomIntoView([node]);
     }
-
-    // Make sure to close the plugin when you're done. Otherwise the plugin will
-    // keep running, which shows the cancel button at the bottom of the screen.
-    figma.closePlugin();
-  };
+  }
+  if (msg.type === 'figma-search') {
+    searchFigmaNodes(msg.data)
+  }
+  if (msg.type === 'get-current-selection') {
+    sendCurrentSelection()
+  }
 };
+

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Widget Template</title>
+  </head>
+  <body>
+    <iframe id="iframe" src="http://127.0.0.1:5173" width="100%" height="100%" frameborder="0" scrolling="no"></iframe>
+    <script>
+      const iframe = document.getElementById('iframe');
+      console.log('HI',iframe)
+      function handleMessage(event) {
+        console.log('handleMessage', event)
+        const message = event.data;
+        console.log('iframe', iframe)
+        iframe.contentWindow.postMessage(message, '*');
+      }
+
+      window.addEventListener('message', handleMessage);
+    </script>
+  </body>
+</html>

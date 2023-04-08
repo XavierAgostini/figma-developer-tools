@@ -3,11 +3,16 @@
   "id": "1223066860142873673",
   "api": "1.0.0",
   "main": "dist/code.js",
+  "ui": "dist/iframe.html",
+  "permissions": [
+    "currentuser",
+    "activeusers",
+    "fileusers"
+  ],
   "capabilities": [],
   "enableProposedApi": false,
   "editorType": [
     "figma",
     "figjam"
-  ],
-  "ui": "dist/index.html"
+  ]
 }

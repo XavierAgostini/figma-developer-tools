@@ -1,46 +1,28 @@
 import React, { useRef } from "react";
-import logoPng from "./logo.png";
-import logoSvg from "./logo.svg?raw";
-import Logo from "./Logo";
+import Selection from './views/Selection';
+import Settings from './views/Settings';
+import Search from './views/Search';
+
+import { Routes, Route, useLocation } from "react-router-dom";
+
 import "./App.css";
+import Navbar from "./components/Navbar";
 
 function App() {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const onCreate = () => {
-    const count = Number(inputRef.current?.value || 0);
-    parent.postMessage(
-      { pluginMessage: { type: "create-rectangles", count } },
-      "*"
-    );
-  };
-
-  const onCancel = () => {
-    parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
-  };
-
+  const location = useLocation()
+  console.log("location", location)
+  // navigate.apply()
   return (
-    <main>
-      <header>
-        <img src={logoPng} />
-        &nbsp;
-        <img src={`data:image/svg+xml;utf8,${logoSvg}`} />
-        &nbsp;
-        <Logo />
-        <h2>Rectangle Creator1234</h2>
-      </header>
-      <section>
-        <input id="input" type="number" min="0" ref={inputRef} />
-        <label htmlFor="input">Rectangle Count</label>
-      </section>
-      <footer>
-        <button className="brand" onClick={onCreate}>
-          Create
-        </button>
-        <button onClick={onCancel}>Cancel</button>
-      </footer>
-    </main>
-  );
+    <div>
+      <Navbar />
+      <Routes>
+        <Route index path="/" element={<Selection />} />
+        <Route path="/Search" element={<Search />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="*" element={<Selection />} />
+      </Routes>
+    </div>
+  )
 }
 
 export default App;
