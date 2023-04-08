@@ -9,7 +9,7 @@ const FigmaItem = (props: Props) => {
   const { node } = props
 
   const scrollToNode = (id: string) => {
-    window.parent.postMessage({ pluginMessage: { type: 'select-node', data: id } }, '*')
+    window.parent.postMessage({ pluginMessage: { type: 'select-node', data: {id} } }, '*')
   }
   return (
     <div>

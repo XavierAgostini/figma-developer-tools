@@ -15,7 +15,7 @@ const Search = () => {
   }
 
   useEffect(function onDebouncedQueryChange () {
-    window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: debouncedSearchTerm } }, '*')
+    window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: { query: debouncedSearchTerm} } }, '*')
   }, [debouncedSearchTerm])
 
   return (

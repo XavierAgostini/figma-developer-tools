@@ -45,11 +45,29 @@ figma.showUI(__html__, { width: 300, height: 500 }, );
 
 figma.on("selectionchange", () =>  sendCurrentSelection());
 
-figma.ui.onmessage = msg => {
+type SelectNodeMessage = {
+  type: "select-node";
+  data: {
+    id: string
+  }
+}
+type FigmaSearchMessage = {
+  type: "figma-search";
+  data: {
+    query: string
+  }
+}
+type GenericMessage = {
+  type: string
+  data: any
+}
+type PluginMessage = SelectNodeMessage | FigmaSearchMessage | GenericMessage
+
+figma.ui.onmessage = (msg: PluginMessage) => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
   if (msg.type === 'select-node') {
-    const node = figma.getNodeById(msg.data);
+    const node = figma.getNodeById(msg.data.id);
     if (node) {
       // @ts-ignore
       // figma.currentPage.selection = [node];
@@ -57,7 +75,7 @@ figma.ui.onmessage = msg => {
     }
   }
   if (msg.type === 'figma-search') {
-    searchFigmaNodes(msg.data)
+    searchFigmaNodes(msg.data.query)
   }
   if (msg.type === 'get-current-selection') {
     sendCurrentSelection()
