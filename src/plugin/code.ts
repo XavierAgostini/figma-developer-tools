@@ -3,6 +3,13 @@
 // a full browser environment (see documentation).
 
 async function searchFigmaNodes(query: string) {
+  if (!query) {
+    figma.ui.postMessage({
+      type: "figma-search-response",
+      data: []
+    });
+    return
+  }
   const nodes = figma.currentPage.findAllWithCriteria({
     types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
   }).filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
@@ -26,7 +33,7 @@ function sendCurrentSelection () {
   }).filter(Boolean)
 
   figma.ui.postMessage({
-    type: "selectionchange",
+    type: "selection-change-response",
     data: selectedNodes
   });
 }
@@ -41,9 +48,6 @@ figma.on("selectionchange", () =>  sendCurrentSelection());
 figma.ui.onmessage = msg => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
-  if (msg.type === 'get-figma-storage-info') {
-    getFigmaStorageInfo()
-  }
   if (msg.type === 'select-node') {
     const node = figma.getNodeById(msg.data);
     if (node) {

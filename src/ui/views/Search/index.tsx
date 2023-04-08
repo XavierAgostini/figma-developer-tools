@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import FigmaItem from '../../components/FigmaItem'
 import { useDebounce } from '../../hooks/useDebounce'
-import { FigmaNode } from '../../types'
+import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.css'
 
 const Search = () => {
   const [query, setQuery] = useState<string>('')
-  const [results, setResults] = useState<FigmaNode[]>([])
+
+  const { figmaSearchResults } = useContext(PluginMessageContext)
   const debouncedSearchTerm = useDebounce(query, 200);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,23 +15,8 @@ const Search = () => {
   }
 
   useEffect(function onDebouncedQueryChange () {
-    if (debouncedSearchTerm) {
-      window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: debouncedSearchTerm } }, '*')
-    } else {
-      setResults([])
-    }
+    window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: debouncedSearchTerm } }, '*')
   }, [debouncedSearchTerm])
-
-  useEffect(function onWindowMessage () {
-    const handleWindowMessage = (event: any) => {
-      if (event.data.pluginMessage.type === 'figma-search-response') {
-        const nodes = event.data.pluginMessage.data;
-        setResults(nodes)
-      }
-    }
-    window.addEventListener('message', handleWindowMessage)
-    return () => window.removeEventListener('message', handleWindowMessage)
-  }, [])
 
   return (
     <div>
@@ -43,12 +29,12 @@ const Search = () => {
       />
       <div>
         <h2>Results</h2>
-        {results.map((node) => {
+        {figmaSearchResults.map((node) => {
           return (
             <FigmaItem key={node.id} node={node}/>
           )
         })}
-        {results.length === 0 && (
+        {figmaSearchResults.length === 0 && (
           <div>
             <p>No results</p>
           </div>

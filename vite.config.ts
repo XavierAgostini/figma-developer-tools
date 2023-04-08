@@ -4,9 +4,6 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
-  // @ts-ignore
-  console.log("TEST1", mode)
-  console.log("TEST2", process.env.PREVIEW_MODE )
   const isPreviewMode = process.env.PREVIEW_MODE === "true"
   return defineConfig({
     root: "./src/ui",
