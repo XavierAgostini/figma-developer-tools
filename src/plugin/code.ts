@@ -2,20 +2,7 @@
 // You can access browser APIs such as the network by creating a UI which contains
 // a full browser environment (see documentation).
 
-async function getFigmaStorageInfo() {
-  console.log('getFigmaStorageInfo')
-  const storageKeys = await figma.clientStorage.keysAsync();
-  const data = storageKeys.reduce(async (acc: any, key) => {
-    acc[key] = await figma.clientStorage.getAsync(key);
-  }, {});
-  figma.ui.postMessage({
-    type: "figma-storage-info-response",
-    data
-  });
-}
-
 async function searchFigmaNodes(query: string) {
-  console.log('searchFigmaNodes')
   const nodes = figma.currentPage.findAllWithCriteria({
     types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
   }).filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
@@ -37,7 +24,7 @@ function sendCurrentSelection () {
       type: node.type,
     }
   }).filter(Boolean)
-  console.log('selectedNodes',selectedNodes)
+
   figma.ui.postMessage({
     type: "selectionchange",
     data: selectedNodes

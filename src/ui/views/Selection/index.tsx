@@ -8,7 +8,6 @@ const Selection = () => {
     const handleWindowMessage = (event: any) => {
       if (event.data.pluginMessage.type === 'selectionchange') {
         const nodes = event.data.pluginMessage.data;
-        console.log('hi',nodes)
         setSelectedNodes(nodes)
       }
     }

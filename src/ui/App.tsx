@@ -3,15 +3,12 @@ import Selection from './views/Selection';
 import Settings from './views/Settings';
 import Search from './views/Search';
 
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
 import Navbar from "./components/Navbar";
 
 function App() {
-  const location = useLocation()
-  console.log("location", location)
-  // navigate.apply()
   return (
     <div>
       <Navbar />

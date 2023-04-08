@@ -34,7 +34,7 @@ const Search = () => {
 
   return (
     <div>
-      <h1>Search Figma Nodes 12</h1>
+      <h1>Search Figma Nodes</h1>
       <input 
         type="text"
         placeholder='Search'
