@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
-import FigmaItem from '../../components/FigmaItem'
+import FigmaItemList from '../../components/FigmaItemList'
 import { PluginMessageContext } from '../../context/PluginMessages'
-import style from './style.css'
+import style from './style.module.css';
 
 const Selection = () => {
   const { selectedFigmaNodes } = useContext(PluginMessageContext)
@@ -10,18 +10,10 @@ const Selection = () => {
     window.parent.postMessage({ pluginMessage: { type: 'get-current-selection' } }, '*')
   }, [])
 
- 
   return (
-    <div>
-      <h1>Selection</h1>
-      <div>
-        <h2>Selected Nodes</h2>
-        {selectedFigmaNodes.map((node) => {
-          return (
-            <FigmaItem key={node.id} node={node}/>
-          )
-        })}
-      </div>
+    <div className={style.container}>
+      <div className={style.title}>Selection</div>
+      <FigmaItemList nodes={selectedFigmaNodes} />
     </div>
   )
 }

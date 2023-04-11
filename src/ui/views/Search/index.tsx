@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react'
-import FigmaItem from '../../components/FigmaItem'
+import FigmaItemList from '../../components/FigmaItemList'
 import { useDebounce } from '../../hooks/useDebounce'
 import { PluginMessageContext } from '../../context/PluginMessages'
-import style from './style.css'
+import style from './style.module.css'
 
 const Search = () => {
   const [query, setQuery] = useState<string>('')
@@ -19,21 +19,21 @@ const Search = () => {
   }, [debouncedSearchTerm])
 
   return (
-    <div>
-      <h1>Search Figma Nodes</h1>
-      <input 
-        type="text"
-        placeholder='Search'
-        value={query}
-        onChange={onInputChange} 
-      />
-      <div>
-        <h2>Results</h2>
-        {figmaSearchResults.map((node) => {
-          return (
-            <FigmaItem key={node.id} node={node}/>
-          )
-        })}
+    <div className={style.container}>
+      <div className={style.header}>
+        <div className={style.title}>Search Figma Node</div>
+        <input 
+          type="text"
+          placeholder='Search'
+          value={query}
+          onChange={onInputChange} 
+        />
+      </div>
+     
+      <div className={style.body}>
+        {figmaSearchResults.length > 0 && (
+          <FigmaItemList nodes={figmaSearchResults}/>
+        )}
         {figmaSearchResults.length === 0 && (
           <div>
             <p>No results</p>
