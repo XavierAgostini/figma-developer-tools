@@ -38,3 +38,9 @@
 .pageResultsInfo :global(.select-menu__menu--active) {
   top: 30px !important;
 }
+.noResults {
+  /* color: #666; */
+  font-size: 12px;
+  margin-top: 8px;
+  text-align: center;
+}

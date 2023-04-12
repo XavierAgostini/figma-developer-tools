@@ -125,6 +125,10 @@ function sendCurrentSelection () {
     const node =  figma.getNodeById(id);
     if (!node) return
 
+    const pageInfo = {
+      id: figma.currentPage.id,
+      name: figma.currentPage.name
+    }
     let type: string = node.type
     if (type === 'RECTANGLE') {
      const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
@@ -134,6 +138,7 @@ function sendCurrentSelection () {
       id: node.id,
       name: node.name,
       type: node.type,
+      page: pageInfo
     }
   }).filter(Boolean)
 

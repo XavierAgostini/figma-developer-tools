@@ -10,3 +10,6 @@
   overflow: auto;
   max-height: 350px;
 }
+.noResults {
+  text-align: center;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import {  useNavigate } from 'react-router-dom';
+import { Text, Icon } from 'react-figma-plugin-ds';
 import style from './style.module.css'
 import classnames  from 'classnames'
 
@@ -20,8 +21,10 @@ const Navbar = () => {
             [style.active]: !isSearch
           })}
         >
-          <span className='icon icon--list-detailed'/>
-          {!isSearch && <span>Select</span>}
+          {/* <span className='icon icon--list-detailed'/>
+          {!isSearch && <span>Select</span>} */}
+          <Icon name="list-detailed" color={!isSearch ? 'black' : 'black3'}/>
+          <Text size='xlarge'>Select</Text>
         </div>
         <div 
           className={classnames({
@@ -29,8 +32,10 @@ const Navbar = () => {
             [style.active]: isSearch
           })}
         >
-          <span className='icon icon--search'/>
-          {isSearch && <span>Search</span>}
+          <Icon name='search' color={isSearch ? 'black' : 'black3'}/>
+          <Text size='xlarge'>Search</Text>
+          {/* <span className='icon icon--search'/> */}
+          {/* {isSearch && <span>Search</span>} */}
         </div>
       </div>
       {/* <div className={style.switch} onClick={toggleSwitch}>

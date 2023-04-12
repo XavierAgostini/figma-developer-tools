@@ -7,7 +7,7 @@ import style from './style.module.css'
 // @ts-ignore
 // import { selectMenu} from "../../../../node_modules/figma-plugin-ds/dist/iife/figma-plugin-ds.js"
 // import { selectMenu } from 'figma-plugin-ds';
-import { Select, Input, Title } from "react-figma-plugin-ds";
+import { Select, Input, Title, Text } from "react-figma-plugin-ds";
 import { FigmaPageFilter } from '../../types';
 import classNames from 'classnames'
 
@@ -69,7 +69,7 @@ const Search = () => {
      
       <div className={style.body}>
         <div className={style.pageResultsInfo}>
-          <Title size='xlarge'>{numResults} Result{numResults > 1 ? 's' : ''} </Title>
+          <Title size='small'>{numResults} Result{numResults > 1 || numResults === 0 ? 's' : ''} </Title>
           <Select
             placeholder=''
             className={classNames(["select-menu", style.selectMenu])}
@@ -87,8 +87,8 @@ const Search = () => {
           <FigmaPageList pages={filteredPageResults}/>
         )}
         {filteredPageResults.length === 0 && (
-          <div>
-            <p>No results</p>
+          <div className={style.noResults}>
+            <Text size="xlarge">No results</Text>
           </div>
         )}
       </div>

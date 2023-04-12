@@ -15,7 +15,7 @@ import {
   FigmaWidgetIcon,
   FigmaSliceIcon
 } from '../FigmaIcons'
-import { Button, Input, Label, Text, Title } from "react-figma-plugin-ds"
+import { Button, Icon, Input, Label, Text, Title } from "react-figma-plugin-ds"
 import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 
@@ -56,7 +56,8 @@ const FigmaItem = (props: Props) => {
   const getFigmaNodeIcon = (type: string) => {
     switch (type) {
       case 'FRAME':
-        return <FigmaFrameIcon />;
+        // return <FigmaFrameIcon />;
+        return <Icon name="frame" />
       case 'SECTION':
         return <FigmaSectionIcon />;
       case 'TEXT':
@@ -66,9 +67,11 @@ const FigmaItem = (props: Props) => {
       case 'GROUP':
         return <FigmaGroupIcon />
       case 'COMPONENT':
-        return <FigmaComponentIcon />
+        // return <FigmaComponentIcon />
+        return <Icon name="component" color='purple' />
       case 'INSTANCE':
-        return <FigmaInstanceIcon />
+        // return <FigmaInstanceIcon />
+        return <Icon name="instance" color='purple' />
       case "POLYGON":
         return <FigmaShapeIcon />
       case "STAR":
@@ -141,7 +144,7 @@ const FigmaItem = (props: Props) => {
                 </div>
                 <div className={style.detail}>
                   <Label className={style.detailLabel} size='small' weight='bold'>Page:</Label>
-                  <Text size="small">{node.page.name}</Text>
+                  <Text size="small">{node?.page?.name}</Text>
                 </div>
                 <div className={style.detail}>
                   <Label className={style.detailLabel}  size='small' weight='bold'>Id:</Label>

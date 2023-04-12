@@ -30,16 +30,17 @@
   display: flex;
   align-items: center;
   border-radius: 8px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   /* padding: 8px 12px; */
+  padding-right: 8px;
+  color: #aaa;
 }
 .toggleItem span {
   cursor: pointer;
-  padding-right: 8px;
-
 }
 .toggleItem.active {
-  background-color: #f0f3f6;
+  color: #000;
+  /* background-color: #acadae; */
   /* color: #fff; */
-  border: 2px solid black;
+  /* border: 2; */
 }
