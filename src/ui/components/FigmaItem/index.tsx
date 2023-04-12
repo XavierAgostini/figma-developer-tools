@@ -13,6 +13,7 @@ import {
   FigmaWidgetIcon,
   FigmaSliceIcon
 } from '../FigmaIcons'
+import { Button } from "react-figma-plugin-ds"
 import style from './style.module.css'
 
 interface Props {
@@ -24,8 +25,11 @@ const FigmaItem = (props: Props) => {
 
   const toggleShowDetails = () => setShowDetails(prev => !prev)
 
-  const scrollToNode = (id: string) => {
+  const selectNode = (id: string) => {
     window.parent.postMessage({ pluginMessage: { type: 'select-node', data: {id} } }, '*')
+  }
+  const scrollToNode = (id: string) => {
+    window.parent.postMessage({ pluginMessage: { type: 'scroll-to-node', data: {id} } }, '*')
   }
 
   const getFigmaNodeIcon = (type: string) => {
@@ -75,11 +79,21 @@ const FigmaItem = (props: Props) => {
       </div>
       {showDetails && (
         <div className={style.details}>
-          <div>Type: {node.type}</div>
-          <div>Name: {node.name}</div>
-          <div>Id: {node.id}</div>
-          <div>Parent: TODO</div>
-          <button onClick={() => scrollToNode(node.id)}>scroll to node</button>
+          <div>
+            <strong>Type: </strong>{node.type}
+          </div>
+          <div>
+            <strong>Name: </strong>
+            {node.name}
+          </div>
+          <div>
+            <strong>Id: </strong>
+            {node.id}</div>
+          <div><strong>Parent: </strong> TODO</div>
+          <div className={style.btnWrapper}>
+            <Button onClick={() => scrollToNode(node.id)}>Scroll to Node</Button>
+            <Button onClick={() => selectNode(node.id)} isSecondary={true}>Select Node</Button>
+          </div>
         </div>
       )}
     </div>

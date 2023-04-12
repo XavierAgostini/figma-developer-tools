@@ -11,20 +11,28 @@
 }
 .pageResultsInfo {
   display: flex; 
+  justify-items: flex-start;
   align-items: center;
 }
+.pageResultsInfo h1 {
+  width: fit-content;
+}
 .selectMenu {
-  width: 150px
+  /* width: 150px */
+}
+.input {
+  display: flex;
 }
 .pageResultsInfo :global(.select-menu__button:focus) {
   outline: none;
   border: none;
 }
 .pageResultsInfo :global(.select-menu__button) {
+  margin-top:4px;
   border: none;
 }
 .pageResultsInfo :global(.select-menu__label) {
-  font-size: 16px;
+  font-size: 13px;
   /* color: #666; */
 }
 .pageResultsInfo :global(.select-menu__menu--active) {

@@ -1,18 +1,21 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { FigmaPluginMessage, FigmaNode } from '../types';
+import { FigmaPluginMessage, FigmaNode, FigmaPageNodes, FigmaPage } from '../types';
 
 interface PluginMessageContextProps {
   selectedFigmaNodes: FigmaNode[];
-  figmaSearchResults: FigmaNode[];
+  figmaSearchResults: FigmaPageNodes[];
+  currentFigmaPage: FigmaPage | null;
 }
 const PluginMessageContext = createContext<PluginMessageContextProps>({
   selectedFigmaNodes: [],
   figmaSearchResults: [],
+  currentFigmaPage: null,
 });
 
 const PluginMessageProvider = ({ children }: { children: React.ReactElement[]}) => {
   const [selectedFigmaNodes, setSelectedFigmaNodes] = useState<FigmaNode[]>([]);
-  const [figmaSearchResults, setFigmaSearchResults] = useState<FigmaNode[]>([]);
+  const [figmaSearchResults, setFigmaSearchResults] = useState<FigmaPageNodes[]>([]);
+  const [currentFigmaPage, setCurrentFigmaPage] = useState<FigmaPage | null>(null);
 
   useEffect(() => {
     const handleMessage = (event: FigmaPluginMessage) => {
@@ -24,6 +27,10 @@ const PluginMessageProvider = ({ children }: { children: React.ReactElement[]}) 
         const nodes = event.data.pluginMessage.data;
         setFigmaSearchResults(nodes)
       }
+      if (event.data.pluginMessage.type === 'current-page-change-response') {
+        const currentPageInfo = event.data.pluginMessage.data;
+        setCurrentFigmaPage(currentPageInfo)
+      }
     };
 
     window.addEventListener('message', handleMessage);
@@ -34,7 +41,7 @@ const PluginMessageProvider = ({ children }: { children: React.ReactElement[]}) 
   }, []);
 
   return (
-    <PluginMessageContext.Provider value={{ selectedFigmaNodes, figmaSearchResults }}>
+    <PluginMessageContext.Provider value={{ selectedFigmaNodes, figmaSearchResults, currentFigmaPage }}>
       {children}
     </PluginMessageContext.Provider>
   );

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { MemoryRouter } from "react-router-dom";
 import { PluginMessageContext } from "../context/PluginMessages";
-import { FigmaNode, FigmaPluginMessage } from '../types';
+import { FigmaPageNodes, FigmaPluginMessage } from '../types';
 import { figmaNodes } from './mockFigmaData';
 
 export const withMemoryRouter = (Story: any) => (
@@ -11,7 +11,7 @@ export const withMemoryRouter = (Story: any) => (
 );
 
 export const withPluginMessageContext = (Story: any) => {
-  const [searchResults, setSearchResults] = useState<FigmaNode[]>([]);
+  const [searchResults, setSearchResults] = useState<FigmaPageNodes[]>([]);
   useEffect(function mockFigmaPluginMessages () {
     const handleMessage = (event: FigmaPluginMessage) => {
       if (event?.data?.pluginMessage?.type === 'figma-search') {
@@ -20,7 +20,17 @@ export const withPluginMessageContext = (Story: any) => {
           setSearchResults([]);
           return;
         }
-        setSearchResults(figmaNodes.filter(node => node.name.toLowerCase().includes(query.toLowerCase())));
+        const filteredResults = figmaNodes.filter(node => node.name.toLowerCase().includes(query.toLowerCase()))
+          .reduce((acc: any, node: any) => {
+            if (!acc[node.pageId]) {
+              acc[node.pageId] = {
+                id: node.pageId,
+                name: node.pageName,
+                nodes: []
+              }
+            }
+          }, {});
+        setSearchResults(filteredResults);
       }
     };
 
@@ -35,6 +45,7 @@ export const withPluginMessageContext = (Story: any) => {
       value={{
         figmaSearchResults: searchResults,
         selectedFigmaNodes: figmaNodes,
+        currentFigmaPage: { id: '0:1', name: 'Page 1'}
       }}>
       <Story />
     </PluginMessageContext.Provider>

@@ -1,12 +1,19 @@
+export interface FigmaPage {
+  id: string;
+  name: string;
+}
 export interface FigmaNode {
   id: string;
   name: string;
   type: string;
-  page: {
-    id: string;
-    name: string;
-  }
+  page: FigmaPage
 }
+export interface FigmaPageNodes {
+  page: FigmaPage;
+  nodes: FigmaNode[]
+}
+
+export type FigmaPageFilter =  "CURRENT" | "ALL";
 
 type FigmaSelectionChangeMessage = {
   type: "selection-change-response";

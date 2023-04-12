@@ -3,14 +3,20 @@
 // a full browser environment (see documentation).
 
 
+interface FigmaPage {
+  id: string;
+  name: string;
+}
 interface FigmaNode {
   id: string;
   name: string;
   type: string;
-  page: {
-    id: string;
-    name: string;
-  }
+  page: FigmaPage
+}
+
+interface FigmaPageNodes {
+  page: FigmaPage;
+  nodes: FigmaNode[]
 }
 async function searchFigmaNodes(query: string) {
   if (!query) {
@@ -21,7 +27,7 @@ async function searchFigmaNodes(query: string) {
     return
   }
   // const matchingNodes = []
-  const matchingNodes: FigmaNode[] = figma.root.children.reduce((acc, pageNode) => {
+  const matchingNodes: FigmaPageNodes[] = figma.root.children.reduce((acc: FigmaPageNodes[], pageNode) => {
     const pageInfo = { id: pageNode.id, name: pageNode.name }
     const nodes = pageNode.findAllWithCriteria({
       types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
@@ -29,9 +35,12 @@ async function searchFigmaNodes(query: string) {
       .filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
       .map(({ id, name, type }) => ({ id, name, type, page: pageInfo }))
       .filter(Boolean);
-    acc.push(...nodes)
+    acc.push({
+      page: pageInfo,
+      nodes
+    })
     return acc
-  }, [] as FigmaNode[])
+  }, [])
  
   figma.ui.postMessage({
     type: "figma-search-response",
@@ -61,6 +70,13 @@ function sendCurrentSelection () {
     data: selectedNodes
   });
 }
+function sendCurrentPage () {
+  const { id, name } = figma.currentPage
+  figma.ui.postMessage({
+    type: 'current-page-change-response',
+    data: { id, name }
+  })
+}
 figma.showUI(__html__, { width: 400, height: 550 }, );
 
 // Calls to "parent.postMessage" from within the HTML page will trigger this
@@ -69,6 +85,7 @@ figma.showUI(__html__, { width: 400, height: 550 }, );
 
 figma.on("selectionchange", () =>  sendCurrentSelection());
 
+figma.on("currentpagechange", () =>  sendCurrentPage());
 type SelectNodeMessage = {
   type: "select-node";
   data: {
@@ -87,14 +104,41 @@ type GenericMessage = {
 }
 type PluginMessage = SelectNodeMessage | FigmaSearchMessage | GenericMessage
 
+function findPageParent(node: any): PageNode | null {
+  if (!node) return null;
+  // @ts-ignore
+  if (node?.type === 'PAGE' || !node?.parent.type) return node
+  else if (node?.parent?.type === 'PAGE') {
+    return node.parent
+  } else {
+    return findPageParent(node?.parent)
+  }
+}
 figma.ui.onmessage = (msg: PluginMessage) => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
   if (msg.type === 'select-node') {
     const node = figma.getNodeById(msg.data.id);
     if (node) {
-      // @ts-ignore
+      const parentPage = findPageParent(node)
+      if (parentPage) {
+        figma.currentPage = parentPage
+        // @ts-ignore
+        figma.currentPage.selection = [node];
+      }
+      figma.viewport.scrollAndZoomIntoView([node]);
+
+    }
+  }
+  if (msg.type === 'scroll-to-node') {
+    const node = figma.getNodeById(msg.data.id);
+    if (node) {
+      
       // figma.currentPage.selection = [node];
+      const parentPage = findPageParent(node)
+      if (parentPage) {
+        figma.currentPage = parentPage
+      }
       figma.viewport.scrollAndZoomIntoView([node]);
     }
   }
@@ -103,6 +147,9 @@ figma.ui.onmessage = (msg: PluginMessage) => {
   }
   if (msg.type === 'get-current-selection') {
     sendCurrentSelection()
+  }
+  if (msg.type === 'get-current-page') {
+    sendCurrentPage()
   }
 };
 

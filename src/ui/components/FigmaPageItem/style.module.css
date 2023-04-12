@@ -8,8 +8,16 @@
   cursor: pointer;
 }
 .pageTitle {
+  display: flex;
+  gap: 4px;
+  align-items: center;
   font-weight: bold;
   font-size: 14px;
+}
+.pageTitle div {
+  /* height: 12px; */
+  width: 12px;
+  cursor: pointer;
 }
 .pageCount {
   color: #666;
