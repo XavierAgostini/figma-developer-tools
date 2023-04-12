@@ -19,6 +19,9 @@ body,
 main {
   height: 100%;
 }
+p {
+  margin: 0;
+}
 /* body,
 input,
 button {

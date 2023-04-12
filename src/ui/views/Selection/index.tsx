@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import FigmaItemList from '../../components/FigmaItemList'
 import { PluginMessageContext } from '../../context/PluginMessages'
+import { Title } from "react-figma-plugin-ds";
 import style from './style.module.css';
 
 const Selection = () => {
@@ -12,7 +13,7 @@ const Selection = () => {
 
   return (
     <div className={style.container}>
-      <div className={style.title}>Selection</div>
+      <Title size='xlarge'>Select</Title>
       <FigmaItemList nodes={selectedFigmaNodes} isScrollable={true} />
     </div>
   )

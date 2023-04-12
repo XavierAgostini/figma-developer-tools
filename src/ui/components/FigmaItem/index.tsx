@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react'
 import ReactJson from 'react-json-view'
+import classNames from 'classnames';
 import { FigmaNode } from '../../types';
 import {
   FigmaTextIcon,
@@ -14,7 +15,7 @@ import {
   FigmaWidgetIcon,
   FigmaSliceIcon
 } from '../FigmaIcons'
-import { Button, Input } from "react-figma-plugin-ds"
+import { Button, Input, Label, Text, Title } from "react-figma-plugin-ds"
 import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 
@@ -106,29 +107,47 @@ const FigmaItem = (props: Props) => {
         <div className={style.figmaItemName}>
           {/* <i className={getFigmaNodeIconClassNameByType(node.type)}/> */}
           {getFigmaNodeIcon(node.type)}
-          <span>{node.name}</span>
+          <Title size="xlarge">{node.name}</Title>
         </div>
       </div>
       {showDetails && (
         <div className={style.details}>
           <div className={style.detailsTabs}>
-            <div className={style.detailsTab} onClick={onDetailsTabClick}>Details</div>
-            <div className={style.detailsTab} onClick={onJsonTabClick}>JSON</div>
+            <div
+              className={classNames({
+                [style.detailsTab]: true,
+                [style.activeTab]: !showJsonTab
+              })}
+              onClick={onDetailsTabClick}
+            >
+              Details
+            </div>
+            <div
+                className={classNames({
+                  [style.detailsTab]: true,
+                  [style.activeTab]: showJsonTab
+                })}
+              onClick={onJsonTabClick}
+            >
+              JSON
+            </div>
           </div>
           <div className={style.detailsPanel}>
             {!showJsonTab && (
               <>
-                <div>
-                  <strong>Type: </strong>{node.type}
+                <div className={style.detail}>
+                  <Label className={style.detailLabel} size='small' weight='bold'>Type:</Label>
+                  <Text size="small">{node.type}</Text>
                 </div>
-                <div>
-                  <strong>Name: </strong>
-                  {node.name}
+                <div className={style.detail}>
+                  <Label className={style.detailLabel} size='small' weight='bold'>Page:</Label>
+                  <Text size="small">{node.page.name}</Text>
                 </div>
-                <div>
-                  <strong>Id: </strong>
-                  {node.id}</div>
-                <div><strong>Parent: </strong> TODO</div>
+                <div className={style.detail}>
+                  <Label className={style.detailLabel}  size='small' weight='bold'>Id:</Label>
+                  <Text size="small">{node.id}</Text>
+                </div>
+
                 <div className={style.btnWrapper}>
                   <Button onClick={() => scrollToNode(node.id)}>Scroll to Node</Button>
                   <Button onClick={() => selectNode(node.id)} isSecondary={true}>Select Node</Button>
@@ -137,7 +156,7 @@ const FigmaItem = (props: Props) => {
             )}
             {showJsonTab && (
               <div>
-                <Input type="text" placeholder="Search" onChange={onPropertySeach}/>
+                <Input type="text" icon='search' placeholder="Search Node Properties" onChange={onPropertySeach} className={style.propertySearchInput}/>
                 <ReactJson src={getNodeJSON()} collapsed={1} />
               </div>
             )}
