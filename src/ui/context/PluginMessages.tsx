@@ -5,18 +5,25 @@ interface PluginMessageContextProps {
   selectedFigmaNodes: FigmaNode[];
   figmaSearchResults: FigmaPageNodes[];
   currentFigmaPage: FigmaPage | null;
+  selectedFigmaNodeJSON: any;
+  clearSelectedFigmaNodeJSON: () => void;
 }
 const PluginMessageContext = createContext<PluginMessageContextProps>({
   selectedFigmaNodes: [],
   figmaSearchResults: [],
   currentFigmaPage: null,
+  selectedFigmaNodeJSON: null,
+  clearSelectedFigmaNodeJSON: () => null,
 });
 
 const PluginMessageProvider = ({ children }: { children: React.ReactElement[]}) => {
   const [selectedFigmaNodes, setSelectedFigmaNodes] = useState<FigmaNode[]>([]);
   const [figmaSearchResults, setFigmaSearchResults] = useState<FigmaPageNodes[]>([]);
   const [currentFigmaPage, setCurrentFigmaPage] = useState<FigmaPage | null>(null);
+  const [selectedFigmaNodeJSON, setSelectedFigmaNodeJSON] = useState<any>(null);
 
+
+  const clearSelectedFigmaNodeJSON = () => setSelectedFigmaNodeJSON(null);
   useEffect(() => {
     const handleMessage = (event: FigmaPluginMessage) => {
       if (event.data.pluginMessage.type === 'selection-change-response') {
@@ -31,6 +38,10 @@ const PluginMessageProvider = ({ children }: { children: React.ReactElement[]}) 
         const currentPageInfo = event.data.pluginMessage.data;
         setCurrentFigmaPage(currentPageInfo)
       }
+      if (event.data.pluginMessage.type === 'get-node-json-response') {
+        const nodeJSON = event.data.pluginMessage.data;
+        setSelectedFigmaNodeJSON(nodeJSON)
+      }
     };
 
     window.addEventListener('message', handleMessage);
@@ -41,7 +52,7 @@ const PluginMessageProvider = ({ children }: { children: React.ReactElement[]}) 
   }, []);
 
   return (
-    <PluginMessageContext.Provider value={{ selectedFigmaNodes, figmaSearchResults, currentFigmaPage }}>
+    <PluginMessageContext.Provider value={{ selectedFigmaNodes, figmaSearchResults, currentFigmaPage, selectedFigmaNodeJSON, clearSelectedFigmaNodeJSON }}>
       {children}
     </PluginMessageContext.Provider>
   );

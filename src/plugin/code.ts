@@ -48,6 +48,78 @@ async function searchFigmaNodes(query: string) {
   });
 }
 
+function transformFigmaNodeToReadableJSON(node: any, query: string): any {
+  // Get an array of [property name, property descriptor] pairs for the node's prototype
+  const nodeProperties = Object.entries(Object.getOwnPropertyDescriptors(node.__proto__));
+
+  // Define an array of property names to ignore when transforming the node
+  const propertiesToIgnore = ["parent", "children", "removed", "textTruncation", "horizontalPadding"];
+
+  // Create an object to hold the transformed node data
+  let origin: any = {
+    id: node.id,
+    type: node.type,
+    children: undefined
+  };
+
+  // If the node has a parent, add its parent's ID and type to the origin object
+  if (node.parent) {
+    origin.parent = {
+      id: node.parent.id,
+      type: node.parent.type
+    };
+  }
+
+  // Iterate over each property of the node's prototype and add it to the origin object if it meets certain criteria
+  for (const [propertyName, property] of nodeProperties) {
+    // Check if the node's parent is a component set
+    const parentNodeIsComponentSet = node.parent && node.parent.type === "COMPONENT_SET";
+
+    // Only add the property if it has a getter, isn't in the propertiesToIgnore array, and either the node's parent isn't a component set or the property isn't "componentPropertyDefinitions"
+    if (property.get && !propertiesToIgnore.includes(propertyName) && (!parentNodeIsComponentSet || propertyName !== "componentPropertyDefinitions")) {
+      // Add the property value to the origin object
+      origin[propertyName] = property.get.call(node);
+
+      // If the property value is a symbol, set it to "Mixed" for readability
+      if (typeof origin[propertyName] === "symbol") {
+        origin[propertyName] = "Mixed";
+      }
+    }
+  }
+
+  if (query.trim() !== "") {
+    const matchingProperties = Object.entries(origin)
+      .filter(([propertyName, propertyValue]) => propertyName.toLowerCase().includes(query.toLowerCase()) || String(propertyValue).toLowerCase().includes(query.toLowerCase()))
+      .map(([propertyName]) => propertyName);
+    const filteredOrigin: any = matchingProperties.length > 0 ? { id: origin.id, name: origin.name } : {};
+    matchingProperties.forEach((propertyName) => {
+      filteredOrigin[propertyName] = origin[propertyName];
+    });
+    origin = filteredOrigin;
+  }
+
+  // If the node has children, recursively transform them and add them to the origin object
+  if (node.children) {
+    origin.children = node.children.map((child: any) => transformFigmaNodeToReadableJSON(child, query));
+  }
+
+  // If the node is a master component, recursively transform it and add it to the origin object
+  if (node.masterComponent) {
+    origin.masterComponent = transformFigmaNodeToReadableJSON(node.masterComponent, query);
+  }
+
+  let result: any = {
+    id: origin.id,
+    name: origin.name,
+  };
+  Object.keys(origin).sort().forEach((propertyName: string) => {
+    if (result.hasOwnProperty(propertyName)) return
+    result[propertyName] = origin[propertyName];``
+  })
+
+  return result;
+}
+
 function sendCurrentSelection () {
   const selectedNodes = figma.currentPage.selection.map(({ id }) => {
     const node =  figma.getNodeById(id);
@@ -114,6 +186,17 @@ function findPageParent(node: any): PageNode | null {
     return findPageParent(node?.parent)
   }
 }
+
+function sendNodeJson (nodeId: string, query: string) {
+  const node = figma.getNodeById(nodeId);
+  if (!node) return
+  const json = JSON.stringify(transformFigmaNodeToReadableJSON(node, query))
+  figma.ui.postMessage({
+    type: 'get-node-json-response',
+    data: json
+  })
+}
+
 figma.ui.onmessage = (msg: PluginMessage) => {
   // One way of distinguishing between different types of messages sent from
   // your HTML page is to use an object with a "type" property like this.
@@ -150,6 +233,10 @@ figma.ui.onmessage = (msg: PluginMessage) => {
   }
   if (msg.type === 'get-current-page') {
     sendCurrentPage()
+  }
+  if (msg.type === 'get-node-json') {
+    const { id, query } = msg.data
+    sendNodeJson(id, query)
   }
 };
 

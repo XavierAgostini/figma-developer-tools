@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import ReactJson from 'react-json-view'
 import { FigmaNode } from '../../types';
 import {
   FigmaTextIcon,
@@ -13,7 +14,8 @@ import {
   FigmaWidgetIcon,
   FigmaSliceIcon
 } from '../FigmaIcons'
-import { Button } from "react-figma-plugin-ds"
+import { Button, Input } from "react-figma-plugin-ds"
+import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 
 interface Props {
@@ -22,14 +24,32 @@ interface Props {
 const FigmaItem = (props: Props) => {
   const { node } = props
   const [showDetails, setShowDetails] = useState<boolean>(false)
+  const [showJsonTab, setShowJsonTab] = useState<boolean>(false)
 
-  const toggleShowDetails = () => setShowDetails(prev => !prev)
+  const { clearSelectedFigmaNodeJSON, selectedFigmaNodeJSON } = useContext(PluginMessageContext)
+
+  const toggleShowDetails = () => {
+    clearSelectedFigmaNodeJSON()
+    window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id, query: "" } } }, '*')
+    setShowDetails(prev => !prev)
+  }
 
   const selectNode = (id: string) => {
     window.parent.postMessage({ pluginMessage: { type: 'select-node', data: {id} } }, '*')
   }
   const scrollToNode = (id: string) => {
     window.parent.postMessage({ pluginMessage: { type: 'scroll-to-node', data: {id} } }, '*')
+  }
+
+  const onDetailsTabClick = () => setShowJsonTab(false)
+  const onJsonTabClick = () => {
+    // clearSelectedFigmaNodeJSON()
+    // window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id} } }, '*')
+    setShowJsonTab(true)
+  }
+  
+  const onPropertySeach = (query: string) => {
+    window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id, query} } }, '*')
   }
 
   const getFigmaNodeIcon = (type: string) => {
@@ -68,6 +88,18 @@ const FigmaItem = (props: Props) => {
         return null
     }
   }
+
+  const getNodeJSON = () => {
+    try {
+      return JSON.parse(selectedFigmaNodeJSON)
+    } catch (error) {
+      console.error("Error parsing node json", error)
+      return {
+        error: "Error parsing node json"
+      }
+    }
+  }
+
   return (
     <div className={style.figmaItem}>
       <div className={style.header} onClick={toggleShowDetails}>
@@ -79,20 +111,36 @@ const FigmaItem = (props: Props) => {
       </div>
       {showDetails && (
         <div className={style.details}>
-          <div>
-            <strong>Type: </strong>{node.type}
+          <div className={style.detailsTabs}>
+            <div className={style.detailsTab} onClick={onDetailsTabClick}>Details</div>
+            <div className={style.detailsTab} onClick={onJsonTabClick}>JSON</div>
           </div>
-          <div>
-            <strong>Name: </strong>
-            {node.name}
-          </div>
-          <div>
-            <strong>Id: </strong>
-            {node.id}</div>
-          <div><strong>Parent: </strong> TODO</div>
-          <div className={style.btnWrapper}>
-            <Button onClick={() => scrollToNode(node.id)}>Scroll to Node</Button>
-            <Button onClick={() => selectNode(node.id)} isSecondary={true}>Select Node</Button>
+          <div className={style.detailsPanel}>
+            {!showJsonTab && (
+              <>
+                <div>
+                  <strong>Type: </strong>{node.type}
+                </div>
+                <div>
+                  <strong>Name: </strong>
+                  {node.name}
+                </div>
+                <div>
+                  <strong>Id: </strong>
+                  {node.id}</div>
+                <div><strong>Parent: </strong> TODO</div>
+                <div className={style.btnWrapper}>
+                  <Button onClick={() => scrollToNode(node.id)}>Scroll to Node</Button>
+                  <Button onClick={() => selectNode(node.id)} isSecondary={true}>Select Node</Button>
+                </div>
+              </>
+            )}
+            {showJsonTab && (
+              <div>
+                <Input type="text" placeholder="Search" onChange={onPropertySeach}/>
+                <ReactJson src={getNodeJSON()} collapsed={1} />
+              </div>
+            )}
           </div>
         </div>
       )}
