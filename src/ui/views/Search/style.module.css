@@ -9,3 +9,24 @@
   font-weight: bold;
   color: #666;
 }
+.pageResultsInfo {
+  display: flex; 
+  align-items: center;
+}
+.selectMenu {
+  width: 150px
+}
+.pageResultsInfo :global(.select-menu__button:focus) {
+  outline: none;
+  border: none;
+}
+.pageResultsInfo :global(.select-menu__button) {
+  border: none;
+}
+.pageResultsInfo :global(.select-menu__label) {
+  font-size: 16px;
+  /* color: #666; */
+}
+.pageResultsInfo :global(.select-menu__menu--active) {
+  top: 30px !important;
+}

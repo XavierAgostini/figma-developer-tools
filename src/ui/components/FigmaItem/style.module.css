@@ -23,8 +23,18 @@
   /* flex: 1; */
 }
 .figmaItemName {
+  display: flex;
+  gap: 8px;
+  align-items: center;
   font-weight: bold;
   font-size: 14px;
+
+}
+.figmaItemName svg {
+  /* height: 12px;
+  width: 12px; */
+}
+.figmaItemName span {
   max-width: 225px;
   overflow: hidden;
   white-space: nowrap;

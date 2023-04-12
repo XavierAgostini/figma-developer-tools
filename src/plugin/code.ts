@@ -2,6 +2,16 @@
 // You can access browser APIs such as the network by creating a UI which contains
 // a full browser environment (see documentation).
 
+
+interface FigmaNode {
+  id: string;
+  name: string;
+  type: string;
+  page: {
+    id: string;
+    name: string;
+  }
+}
 async function searchFigmaNodes(query: string) {
   if (!query) {
     figma.ui.postMessage({
@@ -10,14 +20,22 @@ async function searchFigmaNodes(query: string) {
     });
     return
   }
-  const nodes = figma.currentPage.findAllWithCriteria({
-    types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
-  }).filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
-
-  const data = nodes.map(({ id, name, type }) => ({ id, name, type }));
+  // const matchingNodes = []
+  const matchingNodes: FigmaNode[] = figma.root.children.reduce((acc, pageNode) => {
+    const pageInfo = { id: pageNode.id, name: pageNode.name }
+    const nodes = pageNode.findAllWithCriteria({
+      types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
+    })
+      .filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
+      .map(({ id, name, type }) => ({ id, name, type, page: pageInfo }))
+      .filter(Boolean);
+    acc.push(...nodes)
+    return acc
+  }, [] as FigmaNode[])
+ 
   figma.ui.postMessage({
     type: "figma-search-response",
-    data
+    data: matchingNodes
   });
 }
 
@@ -25,6 +43,12 @@ function sendCurrentSelection () {
   const selectedNodes = figma.currentPage.selection.map(({ id }) => {
     const node =  figma.getNodeById(id);
     if (!node) return
+
+    let type: string = node.type
+    if (type === 'RECTANGLE') {
+     const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
+     if (rectangleContainsImage) type = 'IMAGE'
+    }
     return {
       id: node.id,
       name: node.name,

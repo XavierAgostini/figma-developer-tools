@@ -112,3 +112,8 @@ img {
   height: auto;
   width: 2rem;
 } */
+
+
+.icon--text {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='feather feather-type icon'%3e%3cpolyline points='4 7 4 4 20 4 20 7'%3e%3c/polyline%3e%3cline x1='9' y1='20' x2='15' y2='20'%3e%3c/line%3e%3cline x1='12' y1='4' x2='12' y2='20'%3e%3c/line%3e%3c/svg%3e");
+}

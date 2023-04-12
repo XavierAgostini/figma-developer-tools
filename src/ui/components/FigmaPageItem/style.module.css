@@ -1,0 +1,20 @@
+.page {
+
+}
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.pageTitle {
+  font-weight: bold;
+  font-size: 14px;
+}
+.pageCount {
+  color: #666;
+  font-size: 12px;
+}
+.itemList {
+  padding-left: 8px;
+}

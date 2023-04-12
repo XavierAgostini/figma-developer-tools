@@ -2,6 +2,10 @@ export interface FigmaNode {
   id: string;
   name: string;
   type: string;
+  page: {
+    id: string;
+    name: string;
+  }
 }
 
 type FigmaSelectionChangeMessage = {

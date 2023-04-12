@@ -3,7 +3,10 @@
   flex-direction: column;
   /* justify-content: center; */
   gap: 8px;
-  overflow: auto;
-  height: 350px;
+
   padding-top: 16px;
+}
+.scrollableContainer {
+  overflow: auto;
+  max-height: 350px;
 }

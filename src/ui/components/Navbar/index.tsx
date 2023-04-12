@@ -1,13 +1,49 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom';
+import React, { useState } from 'react'
+import {  useNavigate } from 'react-router-dom';
 import style from './style.module.css'
+import classnames  from 'classnames'
 
 const Navbar = () => {
+  const [isSearch, setIsSearch] = useState<boolean>(false)
+  const navigate = useNavigate()
+
+  const toggleSwitch = () => {
+    setIsSearch(!isSearch)
+    navigate(isSearch ? '/' : '/search')
+  }
   return (
     <nav className={style.navbar}>
-      <NavLink to="/" className={style.navItem}>Selection</NavLink>
-      <NavLink to="search" className={style.navItem}>Search</NavLink>
-      <NavLink to="settings" className={style.navItem}>Settings</NavLink>
+      <div className={style.toggle} onClick={toggleSwitch}>
+        <div 
+          className={classnames({
+            [style.toggleItem]: true, 
+            [style.active]: !isSearch
+          })}
+        >
+          <span className='icon icon--list-detailed'/>
+          {!isSearch && <span>Select</span>}
+        </div>
+        <div 
+          className={classnames({
+            [style.toggleItem]: true, 
+            [style.active]: isSearch
+          })}
+        >
+          <span className='icon icon--search'/>
+          {isSearch && <span>Search</span>}
+        </div>
+      </div>
+      {/* <div className={style.switch} onClick={toggleSwitch}>
+       
+        <input className={style.switchInput} type="checkbox" checked={!isSearch} />
+        <span className={style.slider}>
+        </span>
+      </div> */}
+      {/* <div className="switch">
+        <span className='icon--search'/>
+        <input className="switch__toggle" type="checkbox" id="uniqueId" checked/>
+        <label className="switch__label">Label</label>
+    </div> */}
     </nav>
   )
 }

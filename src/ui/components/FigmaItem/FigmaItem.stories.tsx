@@ -18,7 +18,11 @@ Primary.args = {
   node: {
     id: "123:123",
     name: "Frame 1",
-    type: "FRAME"
+    type: "FRAME",
+    page: {
+      id: "0:1",
+      name: "Page 1"
+    }
   }
 }
  

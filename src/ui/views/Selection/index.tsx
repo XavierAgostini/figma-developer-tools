@@ -13,7 +13,7 @@ const Selection = () => {
   return (
     <div className={style.container}>
       <div className={style.title}>Selection</div>
-      <FigmaItemList nodes={selectedFigmaNodes} />
+      <FigmaItemList nodes={selectedFigmaNodes} isScrollable={true} />
     </div>
   )
 }
