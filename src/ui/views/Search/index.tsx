@@ -1,18 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react'
-// import FigmaItemList from '../../components/FigmaItemList'
+import classNames from 'classnames'
+
 import FigmaPageList from '../../components/FigmaPageList'
 import { useDebounce } from '../../hooks/useDebounce'
 import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
-// @ts-ignore
-// import { selectMenu} from "../../../../node_modules/figma-plugin-ds/dist/iife/figma-plugin-ds.js"
-// import { selectMenu } from 'figma-plugin-ds';
-import { Select, Input, Title, Text } from "react-figma-plugin-ds";
+import { Select, Input, Title, Text, Button } from "react-figma-plugin-ds";
 import { SelectedItemsListProvider  } from "../../context/SelectedItemsList"
 import { FigmaPageFilter } from '../../types';
-import classNames from 'classnames'
-
-// type PageIdMap = {[key: string]: FigmaNode['page']}
 
 const Search = () => {
   const [query, setQuery] = useState<string>('')
@@ -25,10 +20,10 @@ const Search = () => {
   }
 
   const onSelectedPageChange = (option: any) => {
-    // const pageId = e.target.value as FigmaPageFilter;
     const pageId = option.value as FigmaPageFilter;
     setSelectedPageFilter(pageId)
   }
+  const clearSearch = () => setQuery('')
 
   useEffect(function onDebouncedQueryChange () {
     window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: { query: debouncedSearchTerm} } }, '*')
@@ -58,7 +53,6 @@ const Search = () => {
   return (
     <div className={style.container}>
       <div className={style.header}>
-        <Title size='xlarge'>Search Figma</Title>
         <Input 
           icon="search"
           iconColor='black'
@@ -84,14 +78,15 @@ const Search = () => {
             // onClick={onSelectedPageChange}
           />
         </div>
-        {filteredPageResults.length > 0 && (
+        {numResults > 0 && (
           <SelectedItemsListProvider>
             <FigmaPageList pages={filteredPageResults}/>
           </SelectedItemsListProvider>
         )}
-        {filteredPageResults.length === 0 && (
+        {numResults === 0 && (
           <div className={style.noResults}>
-            <Text size="xlarge">No results</Text>
+            <Text size="xlarge">No results found</Text>
+            {query.length > 0 && <Button onClick={clearSearch} isSecondary>Clear Search</Button>}
           </div>
         )}
       </div>

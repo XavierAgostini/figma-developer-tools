@@ -21,7 +21,7 @@ import {
   FigmaWidgetIcon,
   FigmaSliceIcon
 } from '../FigmaIcons'
-import { Button, Icon, Input, Label, Text, Title } from "react-figma-plugin-ds"
+import { Button, Input, Label, Text, Title } from "react-figma-plugin-ds"
 import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 
@@ -50,8 +50,7 @@ const FigmaItem = (props: Props) => {
 
   const onDetailsTabClick = () => setShowJsonTab(false)
   const onJsonTabClick = () => {
-    // clearSelectedFigmaNodeJSON()
-    // window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id} } }, '*')
+    window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id, query: '' } } }, '*')
     setShowJsonTab(true)
   }
   

@@ -1,11 +1,12 @@
 .container {
-  /* display: flex;
+  display: flex;
+  position: absolute;
+  padding: 16px;
+  height: calc(100% - 48px);
+  width: 100%;
   flex-direction: column;
-  flex: 1;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px; */
-  padding: 8px;
+  /* padding: 8px; */
+  overflow: scroll;
 }
 .title {
   font-size: 16px;

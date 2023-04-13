@@ -1,7 +1,11 @@
 .container {
+  position: fixed;
   display: flex;
   flex-direction: column;
   gap: 8px;
   overflow: auto;
-  height: 300px;
+  padding: 16px;
+  padding-top: 0;
+  width: 100%;
+  height: calc(100% - 35px);
 }

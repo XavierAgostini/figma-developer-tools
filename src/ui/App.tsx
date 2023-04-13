@@ -10,7 +10,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 function App() {
   return (
-    <div>
+    <main>
       <PluginMessageProvider>
         <Navbar />
         <Routes>
@@ -20,7 +20,7 @@ function App() {
           <Route path="*" element={<Selection />} />
         </Routes>
       </PluginMessageProvider>
-    </div>
+    </main>
   )
 }
 
