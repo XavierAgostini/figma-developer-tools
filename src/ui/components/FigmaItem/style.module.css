@@ -30,15 +30,16 @@
 }
 .figmaItemName {
   display: flex;
+  flex: 1;
   gap: 8px;
   align-items: center;
   font-weight: bold;
   font-size: 14px;
-
+  cursor: pointer;
 }
 .figmaItemName svg {
-  /* height: 12px;
-  width: 12px; */
+  height: 16px;
+  width: 16px;
 }
 .figmaItemName span {
   max-width: 225px;
@@ -102,6 +103,11 @@
 }
 div.detailLabel {
   width: fit-content;
+}
+.propertyDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 .propertySearchInput {
   display: flex;

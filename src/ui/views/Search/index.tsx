@@ -8,6 +8,7 @@ import style from './style.module.css'
 // import { selectMenu} from "../../../../node_modules/figma-plugin-ds/dist/iife/figma-plugin-ds.js"
 // import { selectMenu } from 'figma-plugin-ds';
 import { Select, Input, Title, Text } from "react-figma-plugin-ds";
+import { SelectedItemsListProvider  } from "../../context/SelectedItemsList"
 import { FigmaPageFilter } from '../../types';
 import classNames from 'classnames'
 
@@ -84,7 +85,9 @@ const Search = () => {
           />
         </div>
         {filteredPageResults.length > 0 && (
-          <FigmaPageList pages={filteredPageResults}/>
+          <SelectedItemsListProvider>
+            <FigmaPageList pages={filteredPageResults}/>
+          </SelectedItemsListProvider>
         )}
         {filteredPageResults.length === 0 && (
           <div className={style.noResults}>

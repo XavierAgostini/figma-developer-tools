@@ -1,30 +1,72 @@
 import React from 'react'
 export const FigmaTextIcon = () => (
-  <svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h10v3H9V1H5.5v8H7v1H3V9h1.5V1H1v2H0V0z" fillRule="nonzero" fillOpacity="1" fill="#000" stroke="none"></path></svg>
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 26.6666H20" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M5.33337 9.33331V5.33331H26.6667V9.33331" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M16 5.33331V26.6666" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
+export const FigmaEllipseIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 29.3333C23.3638 29.3333 29.3333 23.3638 29.3333 16C29.3333 8.63619 23.3638 2.66666 16 2.66666C8.63619 2.66666 2.66666 8.63619 2.66666 16C2.66666 23.3638 8.63619 29.3333 16 29.3333Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+)
+export const FigmaLineIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M28.9467 4.38668C28.8227 4.26171 28.6752 4.16251 28.5128 4.09482C28.3503 4.02713 28.176 3.99228 28 3.99228C27.824 3.99228 27.6497 4.02713 27.4872 4.09482C27.3248 4.16251 27.1773 4.26171 27.0533 4.38668L3.05333 28.3867C2.92836 28.5106 2.82917 28.6581 2.76148 28.8206C2.69379 28.9831 2.65894 29.1573 2.65894 29.3333C2.65894 29.5094 2.69379 29.6836 2.76148 29.8461C2.82917 30.0086 2.92836 30.1561 3.05333 30.28C3.17728 30.405 3.32475 30.5042 3.48723 30.5719C3.64971 30.6396 3.82398 30.6744 4 30.6744C4.17602 30.6744 4.35029 30.6396 4.51277 30.5719C4.67525 30.5042 4.82272 30.405 4.94667 30.28L28.9467 6.28001C29.0716 6.15606 29.1708 6.00859 29.2385 5.84611C29.3062 5.68363 29.3411 5.50936 29.3411 5.33334C29.3411 5.15733 29.3062 4.98305 29.2385 4.82057C29.1708 4.6581 29.0716 4.51063 28.9467 4.38668V4.38668Z" fill="black"/>
+  </svg>
 )
 export const FigmaImageIcon = () => (
-  <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M20 8C20 10.21 18.21 12 16 12C13.79 12 12 10.21 12 8C12 5.79 13.79 4 16 4C18.21 4 20 5.79 20 8ZM18 8C18 9.104 17.104 10 16 10C14.896 10 14 9.104 14 8C14 6.896 14.896 6 16 6C17.104 6 18 6.896 18 8ZM2 0C0.896 0 0 0.896 0 2V22C0 23.104 0.896 24 2 24H22C23.104 24 24 23.104 24 22V2C24 0.896 23.104 0 22 0H2ZM22 2H2V14.586L7 9.586L19.414 22H22V2ZM2 22V17.414L7 12.414L16.586 22H2Z" fill="black"/>
+</svg>
+
 )
 export const FigmaGroupIcon = () => (
-  <svg  fill="none" height="32" width="32"><g fill="#000"><path d="M17.4 9h-2.8v1h2.8zM20.9 22H22v-1.1h1V23h-2.1zM10 14.6v2.8H9v-2.8zM22 11.1V10h-1.1V9H23v2.1zM22 14.6v2.8h1v-2.8zM10 11.1V10h1.1V9H9v2.1zM9 20.9h1V22h1.1v1H9zM17.4 22h-2.8v1h2.8z"/></g></svg>
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.2 0H12.8V3.2H19.2V0ZM27.2 28.8H28.8V27.2H32V32H27.2V28.8ZM3.2 12.8V19.2H0V12.8H3.2ZM28.8 4.8V3.2H27.2V0H32V4.8H28.8ZM28.8 12.8V19.2H32V12.8H28.8ZM3.2 4.8V3.2H4.8V0H0V4.8H3.2ZM0 27.2H3.2V28.8H4.8V32H0V27.2ZM19.2 28.8H12.8V32H19.2V28.8Z" fill="black"/>
+</svg>
+
 )
 export const FigmaComponentIcon = () => (
-  <svg fill="none" height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg"><path clipRule="evenodd" d="m12.0625 10.9375 3.9375 3.9375 3.9375-3.9375-3.9375-3.9375zm6.4608 0-2.5233 2.5233-2.5233-2.5233 2.5233-2.52329zm-6.4608 10.125 3.9375 3.9375 3.9375-3.9375-3.9375-3.9375zm6.4608 0-2.5233 2.5233-2.5233-2.5233 2.5233-2.5233zm-11.5233-5.0625 3.9375-3.9375 3.9375 3.9375-3.9375 3.9375zm3.9375 2.5233 2.5233-2.5233-2.5233-2.5233-2.52329 2.5233zm6.1875-2.5233 3.9375 3.9375 3.9375-3.9375-3.9375-3.9375zm6.4608 0-2.5233 2.5233-2.5233-2.5233 2.5233-2.5233z" fill="#000" fillRule="evenodd"/></svg>
+  <svg width="31" height="31" viewBox="0 0 31 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9.76752 6.87295L16.3333 0.333313L22.8992 6.87295L16.3333 13.4126L9.76752 6.87295ZM6.87297 22.902L0.333336 16.3333L6.87297 9.7675L13.4126 16.3333L6.87297 22.8991V22.902ZM22.9021 25.7937L16.3333 32.3333L9.76752 25.7937L16.3333 19.254L22.8992 25.7937H22.9021ZM32.3333 16.3333L25.7937 9.7675L19.2541 16.3333L25.7937 22.8991L32.3333 16.3333Z" fill="#8638e5"/>
+  </svg>
+)
+export const FigmaStarIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 2.66666L20.12 11.0133L29.3333 12.36L22.6667 18.8533L24.24 28.0267L16 23.6933L7.76001 28.0267L9.33334 18.8533L2.66667 12.36L11.88 11.0133L16 2.66666Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+)
+export const FigmaSqureIcon = () => (
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M25.3333 4H6.66667C5.19391 4 4 5.19391 4 6.66667V25.3333C4 26.8061 5.19391 28 6.66667 28H25.3333C26.8061 28 28 26.8061 28 25.3333V6.66667C28 5.19391 26.8061 4 25.3333 4Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
 )
 export const FigmaInstanceIcon = () => (
-  <svg fill="none" height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg"><path clipRule="evenodd" d="m16 7 9 9-9 9-9-9zm-7.58579 9 7.58579 7.5858 7.5858-7.5858-7.5858-7.58579z" fill="#000" fillRule="evenodd"/></svg>
+  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.892578 15L15 0.892578L29.1074 15L15 29.1074L0.892578 15ZM15 26.0354L26.0354 15L15 3.96458L3.96458 15L15 26.0354Z" fill="#9747FF"/>
+</svg>
+
 )
 export const FigmaFrameIcon = () => (
-  <svg fill="none" height="32" viewBox="0 0 32 32" width="32" xmlns="http://www.w3.org/2000/svg"><path clipRule="evenodd" d="m11 24v-3h-3v-1h3v-8h-3v-1h3v-3h1v3h8v-3h1v3h3v1h-3v8h3v1h-3v3h-1v-3h-8v3zm9-4v-8h-8v8z" fill="#000" fillRule="evenodd"/></svg>
+  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M9.66671 0.333374V7.00004H20.3334V0.333374H23V7.00004H29.6667V9.66671H23V20.3334H29.6667V23H23V29.6667H20.3334V23H9.66671V29.6667H7.00004V23H0.333374V20.3334H7.00004V9.66671H0.333374V7.00004H7.00004V0.333374H9.66671ZM20.3334 20.3334V9.66671H9.66671V20.3334H20.3334Z" fill="black"/>
+  </svg>  
 )
 export const FigmaShapeIcon = () => (
   <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
 )
 export const FigmaSliceIcon = () => (
-  <svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"><path d="M7 0H3v1h4V0zM1 1V0H0v1h1zM0 3h1v4H0V3zm9 0h1v4H9V3zm1-2H9V0h1v1zM3 9h4v1H3V9zM1 9H0v1h1V9zm8 1V9h1v1H9z" fillRule="nonzero" fillOpacity="1" fill="#000" stroke="none"></path></svg>
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22.4 0H9.6V3.2H22.4V0ZM3.2 3.2V0H0V3.2H3.2ZM0 9.6H3.2V22.4H0V9.6ZM28.8 9.6H32V22.4H28.8V9.6ZM32 3.2H28.8V0H32V3.2ZM9.6 28.8H22.4V32H9.6V28.8ZM3.2 28.8H0V32H3.2V28.8ZM28.8 32V28.8H32V32H28.8Z" fill="black"/>
+  </svg>
 )
 export const FigmaSectionIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><path d="M.5 0C.224 0 0 .224 0 .5v11c0 .276.224.5.5.5h11c.276 0 .5-.224.5-.5V.5c0-.276-.224-.5-.5-.5H.5zM6 1H1v3h5V1zM1 5h5.5c.276 0 .5-.224.5-.5V1h4v10H1V5z" fillRule="evenodd" fillOpacity=".9" fill="#000" stroke="none"></path></svg>
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.33333 0C0.597333 0 0 0.597333 0 1.33333V30.6667C0 31.4027 0.597333 32 1.33333 32H30.6667C31.4027 32 32 31.4027 32 30.6667V1.33333C32 0.597333 31.4027 0 30.6667 0H1.33333ZM16 2.66667H2.66667V10.6667H16V2.66667ZM2.66667 13.3333H17.3333C18.0693 13.3333 18.6667 12.736 18.6667 12V2.66667H29.3333V29.3333H2.66667V13.3333Z" fill="black" fill-opacity="0.9"/>
+  </svg>
 )
 export const FigmaStickyIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M2.5 2.5h11v5.707L8.207 13.5H2.5v-11zm1 1v9h4v-5h5v-4h-9zm8.293 5H8.5v3.293L11.793 8.5z" fillRule="evenodd" fillOpacity="1" fill="#000" stroke="none"></path></svg>

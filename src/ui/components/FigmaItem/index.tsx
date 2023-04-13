@@ -2,13 +2,19 @@ import React, { useContext, useState } from 'react'
 import ReactJson from 'react-json-view'
 import classNames from 'classnames';
 import { FigmaNode } from '../../types';
+import { SelectedItemsListContext } from '../../context/SelectedItemsList'
+
 import {
   FigmaTextIcon,
   FigmaImageIcon,
   FigmaGroupIcon,
   FigmaComponentIcon,
+  FigmaSqureIcon,
   FigmaInstanceIcon,
   FigmaFrameIcon,
+  FigmaStarIcon,
+  FigmaLineIcon,
+  FigmaEllipseIcon,
   FigmaShapeIcon,
   FigmaSectionIcon,
   FigmaStickyIcon,
@@ -20,19 +26,19 @@ import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 
 interface Props {
-  node: FigmaNode
+  node: FigmaNode;
 }
 const FigmaItem = (props: Props) => {
   const { node } = props
-  const [showDetails, setShowDetails] = useState<boolean>(false)
   const [showJsonTab, setShowJsonTab] = useState<boolean>(false)
 
+  const { activeItemId, handleItemSelected } = useContext(SelectedItemsListContext)
   const { clearSelectedFigmaNodeJSON, selectedFigmaNodeJSON } = useContext(PluginMessageContext)
 
   const toggleShowDetails = () => {
     clearSelectedFigmaNodeJSON()
     window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id, query: "" } } }, '*')
-    setShowDetails(prev => !prev)
+    handleItemSelected(node.id)
   }
 
   const selectNode = (id: string) => {
@@ -56,30 +62,31 @@ const FigmaItem = (props: Props) => {
   const getFigmaNodeIcon = (type: string) => {
     switch (type) {
       case 'FRAME':
-        // return <FigmaFrameIcon />;
-        return <Icon name="frame" />
+        return <FigmaFrameIcon/>
       case 'SECTION':
         return <FigmaSectionIcon />;
       case 'TEXT':
         return <FigmaTextIcon />;
       case 'RECTANGLE':
+        return <FigmaSqureIcon />
+      case "IMAGE":
         return <FigmaImageIcon />
       case 'GROUP':
         return <FigmaGroupIcon />
       case 'COMPONENT':
-        // return <FigmaComponentIcon />
-        return <Icon name="component" color='purple' />
+        return <FigmaComponentIcon />
+      case 'COMPONENT_SET':
+        return <FigmaComponentIcon />
       case 'INSTANCE':
-        // return <FigmaInstanceIcon />
-        return <Icon name="instance" color='purple' />
+        return <FigmaInstanceIcon />
       case "POLYGON":
         return <FigmaShapeIcon />
       case "STAR":
-        return <FigmaShapeIcon />
+        return <FigmaStarIcon />
       case "LINE":
-        return <FigmaShapeIcon />
+        return <FigmaLineIcon />
       case "ELLIPSE":
-        return <FigmaShapeIcon />
+        return <FigmaEllipseIcon />
       case 'VECTOR':
         return <FigmaShapeIcon />
       case 'STICKY':
@@ -108,12 +115,11 @@ const FigmaItem = (props: Props) => {
     <div className={style.figmaItem}>
       <div className={style.header} onClick={toggleShowDetails}>
         <div className={style.figmaItemName}>
-          {/* <i className={getFigmaNodeIconClassNameByType(node.type)}/> */}
           {getFigmaNodeIcon(node.type)}
           <Title size="xlarge">{node.name}</Title>
         </div>
       </div>
-      {showDetails && (
+      {activeItemId === node.id && (
         <div className={style.details}>
           <div className={style.detailsTabs}>
             <div
@@ -158,7 +164,7 @@ const FigmaItem = (props: Props) => {
               </>
             )}
             {showJsonTab && (
-              <div>
+              <div className={style.propertyDetails}>
                 <Input type="text" icon='search' placeholder="Search Node Properties" onChange={onPropertySeach} className={style.propertySearchInput}/>
                 <ReactJson src={getNodeJSON()} collapsed={1} />
               </div>
