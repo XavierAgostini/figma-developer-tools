@@ -1,5 +1,5 @@
 .container {
-  position: fixed;
+  position: absolute;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -7,5 +7,5 @@
   padding: 16px;
   padding-top: 0;
   width: 100%;
-  height: calc(100% - 35px);
+  height: calc(100% - 85px)
 }
