@@ -3,6 +3,7 @@ import classNames from 'classnames'
 
 import FigmaPageList from '../../components/FigmaPageList'
 import { useDebounce } from '../../hooks/useDebounce'
+import { FigmaAdjustIcon } from '../../components/FigmaIcons'
 import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 import { Select, Input, Title, Text, Button } from "react-figma-plugin-ds";
@@ -23,7 +24,11 @@ const Search = () => {
     const pageId = option.value as FigmaPageFilter;
     setSelectedPageFilter(pageId)
   }
-  const clearSearch = () => setQuery('')
+  const clearSearch = () => {
+    setQuery('')
+    let input = document.getElementsByClassName(style.input)[0] as HTMLInputElement
+    input.value = '';
+  }
 
   useEffect(function onDebouncedQueryChange () {
     window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: { query: debouncedSearchTerm} } }, '*')
@@ -59,6 +64,12 @@ const Search = () => {
           placeholder='Search'
           className={style.input}
           onChange={onInputChange} 
+        />
+        <Select
+          placeholder=''
+          options={pageList.map(page => ({value: page.id, label: page.name}))}
+          onChange={(e) => console.log('change',e)}
+          onExpand={(e) => console.log('expand',e)}
         />
       </div>
      

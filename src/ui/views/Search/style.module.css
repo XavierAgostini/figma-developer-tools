@@ -6,6 +6,8 @@
   flex-direction: column;
 }
 .header {
+  display: flex;
+  gap: 8px;
   /* margin-bottom: 12px; */
   padding: 16px;
   padding-bottom: 0;
@@ -32,8 +34,9 @@
   /* width: 150px */
 }
 .input {
-  display: flex;
+  flex: 1;
 }
+
 .pageResultsInfo :global(.select-menu__button:focus) {
   outline: none;
   border: none;
