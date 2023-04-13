@@ -10,7 +10,7 @@
   /* justify-content: space-between; */
 }
 .figmaItem:hover {
-  background-color: #1891fb4d;
+  background-color: #18a0fb14;
   border: 1px solid #18a0fb;
 }
 .header {
@@ -20,6 +20,9 @@
   align-items: center;
   padding: 8px 12px;
   justify-content: space-between;
+  cursor: pointer;
+}
+.header :global(.section-title) {
   cursor: pointer;
 }
 
@@ -41,8 +44,9 @@
   height: 16px;
   width: 16px;
 }
-.figmaItemName span {
-  max-width: 225px;
+.figmaItemName p {
+  /* display: block; */
+  max-width: 312px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -115,6 +119,6 @@ div.detailLabel {
 }
 .divider {
   width: 100%;
-  border-color: #e5e5e5;
+  border: 0.5px solid #e5e5e5;
   margin: 0;
 }

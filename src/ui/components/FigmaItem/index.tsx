@@ -115,7 +115,7 @@ const FigmaItem = (props: Props) => {
       <div className={style.header} onClick={toggleShowDetails}>
         <div className={style.figmaItemName}>
           {getFigmaNodeIcon(node.type)}
-          <Title size="large">{node.name}</Title>
+          <Text weight='bold' size="large">{node.name}</Text>
         </div>
       </div>
       {activeItemId === node.id && (
