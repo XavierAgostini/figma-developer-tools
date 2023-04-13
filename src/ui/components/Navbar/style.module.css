@@ -4,7 +4,7 @@
   align-items: center;
   padding: 0 1rem;
   background-color: #fff;
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e5e5e5;
 }
 .navItem {
   display: flex;
@@ -20,27 +20,19 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 175px;
   padding: 8px 12px;
-  /* border-radius: 8px; */
-  /* border: 1px solid black; */
   cursor: pointer;
 }
 .toggleItem {
   display: flex;
   align-items: center;
   border-radius: 8px;
-  /* border: 1px solid black; */
-  /* padding: 8px 12px; */
   padding-right: 8px;
   color: #aaa;
 }
-.toggleItem span {
+.toggleItem :global(.icon) {
   cursor: pointer;
 }
 .toggleItem.active {
   color: #000;
-  /* background-color: #acadae; */
-  /* color: #fff; */
-  /* border: 2; */
 }

@@ -115,7 +115,7 @@ const FigmaItem = (props: Props) => {
       <div className={style.header} onClick={toggleShowDetails}>
         <div className={style.figmaItemName}>
           {getFigmaNodeIcon(node.type)}
-          <Title size="xlarge">{node.name}</Title>
+          <Title size="large">{node.name}</Title>
         </div>
       </div>
       {activeItemId === node.id && (
@@ -140,6 +140,7 @@ const FigmaItem = (props: Props) => {
               JSON
             </div>
           </div>
+          <hr className={style.divider}/>
           <div className={style.detailsPanel}>
             {!showJsonTab && (
               <>

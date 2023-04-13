@@ -3,11 +3,11 @@
   flex-direction: column;
   gap: 8px;
 }
-.scrollableContainer {
-  /* overflow: auto;
-  max-height: 350px; */
-}
 .noResults {
-  /* text-align: center; */
-  margin: auto
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px
 }

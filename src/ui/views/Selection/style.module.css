@@ -1,16 +1,25 @@
 .container {
   display: flex;
   position: absolute;
-  padding: 16px;
   height: calc(100% - 48px);
   width: 100%;
   flex-direction: column;
-  /* padding: 8px; */
-  overflow: scroll;
 }
 .title {
   font-size: 16px;
   font-weight: bold;
   color: #666;
   margin-bottom: 12px;
+}
+.header {
+  padding: 16px;
+  padding-bottom: 8px;
+}
+.header p {
+  padding: 0 8px;
+}
+.body {
+  padding: 16px;
+  overflow: auto;
+  flex: 1;
 }

@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import FigmaItemList from '../../components/FigmaItemList'
 import { PluginMessageContext } from '../../context/PluginMessages'
 import { SelectedItemsListProvider } from '../../context/SelectedItemsList'
+import { Text } from 'react-figma-plugin-ds'
 import style from './style.module.css';
 
 const Selection = () => {
@@ -13,9 +14,14 @@ const Selection = () => {
 
   return (
     <div className={style.container}>
-      <SelectedItemsListProvider>
-        <FigmaItemList nodes={selectedFigmaNodes} isScrollable={true} />
-      </SelectedItemsListProvider>
+      <div className={style.header}>
+        <Text size='small' weight='bold'>{selectedFigmaNodes.length} Item{selectedFigmaNodes.length !== 1 ? 's' : ''} Selected</Text>
+      </div>
+      <div className={style.body}>
+        <SelectedItemsListProvider>
+          <FigmaItemList nodes={selectedFigmaNodes} />
+        </SelectedItemsListProvider>
+      </div>
     </div>
   )
 }

@@ -78,11 +78,10 @@
 }
 .detailsTabs {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   height: 40px;
   line-height: 40px;
   padding: 0 8px;
-  border-bottom: 1px solid #e5e5e5;
 }
 .detailsTab {
   cursor: pointer;
@@ -113,4 +112,9 @@ div.detailLabel {
   display: flex;
   align-items: center;
   margin-bottom: 8px;
+}
+.divider {
+  width: 100%;
+  border-color: #e5e5e5;
+  margin: 0;
 }

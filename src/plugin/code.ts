@@ -131,13 +131,14 @@ function sendCurrentSelection () {
     }
     let type: string = node.type
     if (type === 'RECTANGLE') {
-     const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
-     if (rectangleContainsImage) type = 'IMAGE'
+      const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
+      console.log('rectangleContainsImage',rectangleContainsImage)
+      if (rectangleContainsImage) type = 'IMAGE'
     }
     return {
       id: node.id,
       name: node.name,
-      type: node.type,
+      type,
       page: pageInfo
     }
   }).filter(Boolean)

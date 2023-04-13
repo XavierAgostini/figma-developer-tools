@@ -26,6 +26,7 @@
 }
 .pageResultsInfo h1 {
   width: fit-content;
+  padding: 0;
 }
 .selectMenu {
   /* width: 150px */

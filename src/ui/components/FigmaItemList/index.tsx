@@ -3,26 +3,21 @@ import FigmaItem from '../FigmaItem'
 import { FigmaNode } from '../../types'
 import { Text } from 'react-figma-plugin-ds'
 import style from './style.module.css'
-import classNames from 'classnames'
 
 interface Props {
   nodes: FigmaNode[]
-  isScrollable: boolean
 }
-const FigmaItemList = ({ nodes, isScrollable }: Props) => {
+const FigmaItemList = ({ nodes }: Props) => {
   if (!nodes.length) {
     return (
       <div className={style.noResults}>
-        <Text size="xlarge">Select a Figma Node</Text>
+        <Text size="xlarge">Select one or more Figma layers</Text>
       </div>
     )
   }
   return (
     <div 
-      className={classNames({
-        [style.container]: true,
-        [style.scrollableContainer]: isScrollable
-      })}
+      className={style.container}
     >
       {nodes.map(node => (
         <FigmaItem key={node.id} node={node} />

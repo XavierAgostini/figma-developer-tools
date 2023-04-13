@@ -28,7 +28,7 @@ const FigmaPageItem = ({ nodes, pageInfo }: Props) => {
       </div>
       {!isCollapse && (
         <div className={style.itemList}>
-          <FigmaItemList nodes={nodes} isScrollable={false}/>
+          <FigmaItemList nodes={nodes} />
         </div>
       )}
     </div>

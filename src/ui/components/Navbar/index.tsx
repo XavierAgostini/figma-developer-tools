@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {  useNavigate } from 'react-router-dom';
 import { Text, Icon } from 'react-figma-plugin-ds';
 import style from './style.module.css'
+import { SelectionIcon } from '../FigmaIcons'
 import classnames  from 'classnames'
 
 const Navbar = () => {
@@ -21,10 +22,8 @@ const Navbar = () => {
             [style.active]: !isSearch
           })}
         >
-          {/* <span className='icon icon--list-detailed'/>
-          {!isSearch && <span>Select</span>} */}
-          <Icon name="list-detailed" color={!isSearch ? 'black' : 'black3'}/>
-          <Text size='xlarge'>Select</Text>
+          <SelectionIcon width={14} height={14}  fill={!isSearch ? '#000' : '#aaa'} style={{ marginRight: 8}}/>
+          <Text size='xlarge' weight={!isSearch ? 'bold' : 'medium'}>Select</Text>
         </div>
         <div 
           className={classnames({
@@ -33,7 +32,7 @@ const Navbar = () => {
           })}
         >
           <Icon name='search' color={isSearch ? 'black' : 'black3'}/>
-          <Text size='xlarge'>Search</Text>
+          <Text size='xlarge' weight={isSearch ? 'bold' : 'medium'}>Search</Text>
           {/* <span className='icon icon--search'/> */}
           {/* {isSearch && <span>Search</span>} */}
         </div>
