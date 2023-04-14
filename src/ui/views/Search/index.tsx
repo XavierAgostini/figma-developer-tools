@@ -47,7 +47,6 @@ const Search = () => {
           resultsByNodeType={resultsByNodeType}
         />
       </div>
-     
       <div className={style.body}>
         <div className={style.pageResultsInfo}>
           <Title size='small'>{numResults} Result{numResults > 1 || numResults === 0 ? 's' : ''} </Title>

@@ -101,11 +101,17 @@
 }
 .detail {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
+}
+.detailsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 div.detailLabel {
   width: fit-content;
+  height: fit-content;
 }
 .propertyDetails {
   display: flex;

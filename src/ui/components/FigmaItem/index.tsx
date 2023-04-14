@@ -116,7 +116,12 @@ const FigmaItem = (props: Props) => {
       <div className={style.header} onClick={toggleShowDetails}>
         <div className={style.figmaItemName}>
           {getFigmaNodeIcon(node.type)}
-          <Text weight='bold' size="large">{node.name}</Text>
+          <div>
+            <Text weight='bold' size="large">{node.name}</Text>
+            {node.type === 'TEXT' && (
+              <Text size="small">{node.text}</Text>
+            )}
+          </div>
         </div>
       </div>
       {activeItemId === node.id && (
@@ -146,17 +151,28 @@ const FigmaItem = (props: Props) => {
             {!showJsonTab && (
               <>
                 <div className={style.detail}>
-                  <Label className={style.detailLabel} size='small' weight='bold'>Type:</Label>
-                  <Text size="small">{node.type}</Text>
-                </div>
-                <div className={style.detail}>
-                  <Label className={style.detailLabel} size='small' weight='bold'>Page:</Label>
-                  <Text size="small">{node?.page?.name}</Text>
+                  <Label className={style.detailLabel} size='small' weight='bold'>Name:</Label>
+                  <Text size="small">{node.name}</Text>
                 </div>
                 <div className={style.detail}>
                   <Label className={style.detailLabel}  size='small' weight='bold'>Id:</Label>
                   <Text size="small">{node.id}</Text>
                 </div>
+                <div className={style.detail}>
+                  <Label className={style.detailLabel} size='small' weight='bold'>Type:</Label>
+                  <Text size="small">{node.type}</Text>
+                </div>
+                {node.type === 'TEXT' && (
+                  <div className={style.detail}>
+                    <Label className={style.detailLabel} size='small' weight='bold'>Text:</Label>
+                    <Text size="small">{node.text}</Text>
+                  </div>
+                )}
+                <div className={style.detail}>
+                  <Label className={style.detailLabel} size='small' weight='bold'>Page:</Label>
+                  <Text size="small">{node?.page?.name}</Text>
+                </div>
+               
 
                 <div className={style.btnWrapper}>
                   {/* <Button onClick={() => scrollToNode(node.id)}>Scroll to Node</Button> */}

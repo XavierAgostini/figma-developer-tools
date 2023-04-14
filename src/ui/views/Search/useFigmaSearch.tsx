@@ -10,7 +10,7 @@ import { FigmaComponentIcon, FigmaFrameIcon, FigmaImageIcon, FigmaInstanceIcon, 
 
 const SEARCH_OPTIONS = ['text_value_search', 'layer_name_search'];
 
-const options: SelectOption[] = [
+const baseOptions: SelectOption[] = [
   { value: 'all', label: 'All', icon: <FimgaAllIcon/>, count: 0, isSelected: true },
   { value: 'frame_and_group', label: 'Frame / Group', icon: <FigmaFrameIcon/>, count: 0, isSelected: false},
   { value: 'text', label: 'Text', icon: <FigmaTextIcon/>, count: 0, isSelected: false },
@@ -21,13 +21,13 @@ const options: SelectOption[] = [
   { value: 'other', label: 'Other', icon: <FigmaEllipseIcon/>, count: 0, isSelected: false },
   { value: 'divider', label: 'divider', icon: null, isSelected: false },
   { value: 'layer_name_search', label: 'Layer Name', icon: <FimgaAllIcon/>, isSelected: true },
-  { value: 'text_value_search', label: 'Text', icon: <FigmaTextIcon/>, isSelected: false },
+  { value: 'text_value_search', label: 'Text', icon: <FigmaTextIcon/>, isSelected: true },
 ];
 
 export const useFigmaSearch = () => {
   const [query, setQuery] = useState<string>('')
   const [selectedPageFilter, setSelectedPageFilter] = useState<FigmaPageFilter>("ALL")
-  const [selectedFilterOptions, setSelectedFilterOptions] = useState<SelectOption[]>([options[0]]);
+  const [selectedFilterOptions, setSelectedFilterOptions] = useState<SelectOption[]>([baseOptions[0]]);
 
   const { figmaSearchResults, currentFigmaPage } = useContext(PluginMessageContext)
 
@@ -41,21 +41,45 @@ export const useFigmaSearch = () => {
 
 
   const handleSelectFilterOption = (options: MultiValue<SelectOption>, actionMeta: ActionMeta<SelectOption>) => {    
-    const formatedNodeOptions = options.filter(option => !SEARCH_OPTIONS.includes(option.value)).map((option) => {
-      return { ...option, isSelected: true }
-    })
-    let formatedSearchOptions = options.filter(option => SEARCH_OPTIONS.includes(option.value)).map((option) => {
+    let formatedNodeOptions = options.filter(option => !SEARCH_OPTIONS.includes(option.value)).map((option) => {
       return { ...option, isSelected: true }
     })
 
+    if (formatedNodeOptions.length > 1) {
+      if (selectedOptionMap['all']) {
+        formatedNodeOptions = formatedNodeOptions.filter(option => option.value !== 'all');
+      }
+      else {
+        const allOptionSelected = formatedNodeOptions.some(option => option.value === 'all');
+        if (allOptionSelected) {
+          formatedNodeOptions = formatedNodeOptions.filter(option => option.value === 'all');
+        }
+      }
+    }
+    if (formatedNodeOptions.length === 0) {
+      formatedNodeOptions = baseOptions.filter(option => option.value === 'all').map((option) => {
+        return { ...option, isSelected: true }
+      })
+    }
+
+    let formatedSearchOptions = options.filter(option => SEARCH_OPTIONS.includes(option.value)).map((option) => {
+      return { ...option, isSelected: true }
+    })
+    
+
     // Only allow one search option to be selected at a time
     if (formatedSearchOptions.length > 1) {
-      if (selectedOptionMap['text_value_search']) {
+      if (selectedOptionMap['text_value_search'] && selectedOptionMap['layer_name_search']) {
         formatedSearchOptions = formatedSearchOptions.filter(option => option.value !== 'text_value_search');
       }
-      if (selectedOptionMap['layer_name_search']) {
+      if (selectedOptionMap['layer_name_search'] && selectedOptionMap['text_value_search'] ) {
         formatedSearchOptions = formatedSearchOptions.filter(option => option.value !== 'layer_name_search');
       }
+    }
+    if (formatedSearchOptions.length === 0) {
+      formatedSearchOptions = baseOptions.filter(option => option.value === 'layer_name_search').map((option) => {
+        return { ...option, isSelected: true }
+      })
     }
    
     const allOptions = [...formatedNodeOptions, ...formatedSearchOptions];
@@ -64,7 +88,6 @@ export const useFigmaSearch = () => {
 
   // Filters search results by selected page filter: ALL, CURRENT
   const filteredPageResults = useMemo(() => {
-    console.log('filtering page:', selectedPageFilter)
     return figmaSearchResults.filter(page => {
       if (selectedPageFilter === 'ALL') {
         return true
@@ -83,7 +106,6 @@ export const useFigmaSearch = () => {
       if (selectedOptionMap['all']) {
         return page;
       }
-      // console.log('filtering nodes')
       const filteredNodes = page.nodes.filter(node => {
         if (node.type === "TEXT") {
           return selectedOptionMap['text']
@@ -106,7 +128,7 @@ export const useFigmaSearch = () => {
         }
         return selectedOptionMap['other']
       })
-      // console.log('filter result', page.nodes.length, filteredNodes.length)
+
       return {
         ...page,
         nodes: filteredNodes
@@ -174,7 +196,7 @@ export const useFigmaSearch = () => {
     return acc + page.nodes.length
   }, 0)
  
-  const filterMenuOptions: SelectOption[] = options.map((option) => {
+  const filterMenuOptions: SelectOption[] = baseOptions.map((option) => {
     const isSelected = selectedOptionMap[option.value];
     const count = !SEARCH_OPTIONS.includes(option.value) ? resultsByNodeType[option.value] || 0 : undefined;
     return {

@@ -6,6 +6,7 @@ export interface FigmaNode {
   id: string;
   name: string;
   type: string;
+  text?: string;
   page: FigmaPage
 }
 export interface FigmaPageNodes {

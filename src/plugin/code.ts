@@ -10,6 +10,7 @@ interface FigmaPage {
 interface FigmaNode {
   id: string;
   name: string;
+  text?: string;
   type: string;
   page: FigmaPage
 }
@@ -18,6 +19,8 @@ interface FigmaPageNodes {
   page: FigmaPage;
   nodes: FigmaNode[]
 }
+
+
 async function searchFigmaNodes(query: string) {
   if (!query) {
     figma.ui.postMessage({
@@ -26,14 +29,54 @@ async function searchFigmaNodes(query: string) {
     });
     return
   }
+
+  const shouldUseFigmaIdSearch = query.startsWith('id=')
+
+  if (shouldUseFigmaIdSearch) {
+   
+    const apiIdQuery = query.replace('id=', '')
+    const searchResult: FigmaPageNodes[] = []
+
+    const node = figma.getNodeById(apiIdQuery)
+    if (node) {
+      const { id, name, type } = node
+      const parentPage = findNodePage(node)
+      if (parentPage) {
+        const pageInfo = { id: parentPage.id, name: parentPage.name}
+        const text = type === 'TEXT' ? (node as TextNode).characters : undefined
+        searchResult.push({
+          page: pageInfo,
+          nodes: [{ id, name, type, page: pageInfo, text }]
+        })
+      }
+    }
+  
+    figma.ui.postMessage({
+      type: "figma-search-response",
+      data: searchResult
+    });
+    return
+  }
+ 
   // const matchingNodes = []
   const matchingNodes: FigmaPageNodes[] = figma.root.children.reduce((acc: FigmaPageNodes[], pageNode) => {
     const pageInfo = { id: pageNode.id, name: pageNode.name }
     const nodes = pageNode.findAllWithCriteria({
       types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
     })
-      .filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))
-      .map(({ id, name, type }) => ({ id, name, type, page: pageInfo }))
+      .filter(node => {
+        const { name, type } = node
+        const text = type === 'TEXT' ? (node as TextNode).characters.toLowerCase() : ''
+        if (type === 'TEXT') {
+          if (text.includes(query.toLowerCase())) return true
+        }
+        return name.toLowerCase().includes(query.toLowerCase())
+      })
+      .map(node => {
+        const { id, name, type } = node
+        const text = type === 'TEXT' ? (node as TextNode).characters : undefined
+        return { id, name, type, page: pageInfo, text }
+      })
       .filter(Boolean);
     acc.push({
       page: pageInfo,
@@ -100,7 +143,11 @@ function transformFigmaNodeToReadableJSON(node: any, query: string): any {
 
   // If the node has children, recursively transform them and add them to the origin object
   if (node.children) {
-    origin.children = node.children.map((child: any) => transformFigmaNodeToReadableJSON(child, query));
+    origin.children = node.children.map((child: any) => ({
+      id: child.id,
+      name: child.name,
+      type: child.type
+    }));
   }
 
   // If the node is a master component, recursively transform it and add it to the origin object
@@ -132,7 +179,7 @@ function sendCurrentSelection () {
     let type: string = node.type
     if (type === 'RECTANGLE') {
       const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
-      console.log('rectangleContainsImage',rectangleContainsImage)
+
       if (rectangleContainsImage) type = 'IMAGE'
     }
     return {
@@ -182,14 +229,14 @@ type GenericMessage = {
 }
 type PluginMessage = SelectNodeMessage | FigmaSearchMessage | GenericMessage
 
-function findPageParent(node: any): PageNode | null {
+function findNodePage(node: any): PageNode | null {
   if (!node) return null;
   // @ts-ignore
   if (node?.type === 'PAGE' || !node?.parent.type) return node
   else if (node?.parent?.type === 'PAGE') {
     return node.parent
   } else {
-    return findPageParent(node?.parent)
+    return findNodePage(node?.parent)
   }
 }
 
@@ -209,7 +256,7 @@ figma.ui.onmessage = (msg: PluginMessage) => {
   if (msg.type === 'select-node') {
     const node = figma.getNodeById(msg.data.id);
     if (node) {
-      const parentPage = findPageParent(node)
+      const parentPage = findNodePage(node)
       if (parentPage) {
         figma.currentPage = parentPage
         // @ts-ignore
@@ -224,7 +271,7 @@ figma.ui.onmessage = (msg: PluginMessage) => {
     if (node) {
       
       // figma.currentPage.selection = [node];
-      const parentPage = findPageParent(node)
+      const parentPage = findNodePage(node)
       if (parentPage) {
         figma.currentPage = parentPage
       }
