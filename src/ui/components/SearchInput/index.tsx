@@ -13,7 +13,6 @@ const SearchInput = ({ placeholder, searchInputRef, onChange }: SearchInputProps
       if ((event.metaKey || event.ctrlKey) && event.key === 'a') {
         event.preventDefault();
         (event?.target as HTMLInputElement).select()
-        // searchInputRef?.current?.select();
       }
     }
 

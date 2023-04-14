@@ -44,6 +44,9 @@ const FigmaItem = (props: Props) => {
     handleItemSelected(node.id)
   }
 
+  const isComponentType = (type: string) => {
+    return type === 'COMPONENT' || type === 'COMPONENT_SET' || type === 'INSTANCE'
+  }
   const selectNode = (id: string) => {
     window.parent.postMessage({ pluginMessage: { type: 'select-node', data: {id} } }, '*')
   }
@@ -120,9 +123,9 @@ const FigmaItem = (props: Props) => {
         <div className={style.figmaItemName}>
           {getFigmaNodeIcon(node.type)}
           <div>
-            <Text weight='bold' size="large">{node.name}</Text>
+            <Text weight='bold' size="large" className={isComponentType(node.type) ? style.componentText : ''}>{node.name}</Text>
             {node.type === 'TEXT' && (
-              <Text size="small">{node.previewText}</Text>
+              <Text size="small" className={isComponentType(node.type) ? style.componentText : ''}>{node.previewText}</Text>
             )}
           </div>
         </div>
@@ -190,7 +193,6 @@ const FigmaItem = (props: Props) => {
                   placeholder="Search Node Properties"
                   onChange={onPropertySeach}
                 />
-                {/* <Input type="text" icon='search' placeholder="Search Node Properties" onChange={onPropertySeach} className={style.propertySearchInput}/> */}
                 <ReactJson src={getNodeJSON()} collapsed={1} />
               </div>
             )}

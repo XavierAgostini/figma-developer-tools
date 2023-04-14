@@ -12,7 +12,6 @@ const FigmaPageItem = ({ nodes, pageInfo }: Props) => {
   const [isCollapse, setIsCollapsed] = useState<boolean>(false)
 
   const toggleCollapse = () => {
-    console.log('toggleCollapse')
     setIsCollapsed(prev => !prev)
   }
   

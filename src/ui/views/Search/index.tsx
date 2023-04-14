@@ -1,19 +1,17 @@
 import React from 'react'
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 import classNames from 'classnames'
+
 import SearchFilterDropdown from '../../components/SearchFilterDropdown'
 import FigmaPageList from '../../components/FigmaPageList'
-import { Tooltip } from 'react-tooltip'
-
-
-import 'react-tooltip/dist/react-tooltip.css'
-
 import { Select, Title, Text, Button } from "react-figma-plugin-ds";
 import { SelectedItemsListProvider  } from "../../context/SelectedItemsList"
 import { useFigmaSearch } from './useFigmaSearch'
 import SearchInput from '../../components/SearchInput'
+import { FigmaHelpIcon } from '../../components/FigmaIcons'
 
 import style from './style.module.css'
-import { FigmaHelpIcon } from '../../components/FigmaIcons'
 
 const PAGE_FILTER_LIST = [
   { id: 'CURRENT', name: 'This Page'},

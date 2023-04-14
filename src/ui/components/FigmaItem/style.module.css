@@ -1,17 +1,15 @@
 .figmaItem {
   display: flex;
-  /* background-color: #1891fb4d; */
   border-radius: 4px;
-  /* padding: 8px 12px; */
-  /* align-items: center; */
   flex-direction: column;
   border: 1px solid transparent;
-/* background-color: #1891fb4d; */
-  /* justify-content: space-between; */
 }
 .figmaItem:hover {
   background-color: #18a0fb14;
   border: 1px solid #18a0fb;
+}
+.componentText {
+  color: #8638e5;
 }
 .header {
   display: flex;
@@ -29,7 +27,6 @@
 .figmaItemType {
   color: #666;
   font-size: 12px;
-  /* flex: 1; */
 }
 .figmaItemName {
   display: flex;
@@ -45,15 +42,12 @@
   width: 16px;
 }
 .figmaItemName p {
-  /* display: block; */
   max-width: 312px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 .figmaItemNodeId {
-  /* font-size: 12px; */
-  /* flex: 1; */
   font-size: 12px;
   color: #666;
   justify-self: flex-end;
@@ -63,10 +57,7 @@
   flex-direction: column;
   align-items: flex-start;
   padding: 8px 12px;
-
   gap: 8px;
-  /* padding-left: 24px; */
-  /* margin-left: 24px; */
   background-color: #fff;
 }
 .btnWrapper {

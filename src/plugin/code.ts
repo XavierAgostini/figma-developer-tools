@@ -22,6 +22,29 @@ interface FigmaPageNodes {
 }
 
 
+function getNodeInfo(node: BaseNode, pageInfo: FigmaPage, query?: string): FigmaNode {
+  let type: string = node.type
+  let text, previewText;
+
+  if (query !== undefined) {
+    text = type === 'TEXT' ? (node as TextNode).characters : undefined
+    previewText = showMatchingText(query, text || '')
+  }
+   
+  if (type === 'RECTANGLE') {
+    const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
+    if (rectangleContainsImage) type = 'IMAGE'
+  }
+  return {
+    id: node.id,
+    name: node.name,
+    type,
+    page: pageInfo,
+    text,
+    previewText
+  }
+}
+
 function showMatchingText(searchQuery: string, text: string) {
   const maxContextLength = 40; // maximum length of neighboring text
   const maxBeforeLength = 20; // maximum length of characters before the match
@@ -51,6 +74,7 @@ function showMatchingText(searchQuery: string, text: string) {
 }
 
 
+
 async function searchFigmaNodes(query: string) {
   if (!query) {
     figma.ui.postMessage({
@@ -69,20 +93,14 @@ async function searchFigmaNodes(query: string) {
 
     const node = figma.getNodeById(apiIdQuery)
     if (node) {
-      const { id, name, type } = node
       const parentPage = findNodePage(node)
       if (parentPage) {
         const pageInfo = { id: parentPage.id, name: parentPage.name}
-        const text = type === 'TEXT' ? (node as TextNode).characters : undefined
-        let nodeType: string = type
-        if (nodeType === 'RECTANGLE') {
-          const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
-
-          if (rectangleContainsImage) nodeType = 'IMAGE'
-        }
+       
+        const nodeInfo = getNodeInfo(node, pageInfo)
         searchResult.push({
           page: pageInfo,
-          nodes: [{ id, name, type: nodeType, page: pageInfo, text }]
+          nodes: [nodeInfo]
         })
       }
     }
@@ -108,20 +126,7 @@ async function searchFigmaNodes(query: string) {
         }
         return name.toLowerCase().includes(query.toLowerCase())
       })
-      .map(node => {
-        const { id, name, type } = node
-        const text = type === 'TEXT' ? (node as TextNode).characters : undefined
-        const previewText = showMatchingText(query, text || '')
-
-        let nodeType: string = type
-        if (nodeType === 'RECTANGLE') {
-          const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
-    
-          if (rectangleContainsImage) nodeType = 'IMAGE'
-        }
-
-        return { id, name, type, page: pageInfo, text, previewText }
-      })
+      .map(node => getNodeInfo(node, pageInfo))
       .filter(Boolean);
     acc.push({
       page: pageInfo,
@@ -221,18 +226,8 @@ function sendCurrentSelection () {
       id: figma.currentPage.id,
       name: figma.currentPage.name
     }
-    let type: string = node.type
-    if (type === 'RECTANGLE') {
-      const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
-
-      if (rectangleContainsImage) type = 'IMAGE'
-    }
-    return {
-      id: node.id,
-      name: node.name,
-      type,
-      page: pageInfo
-    }
+    const nodeInfo = getNodeInfo(node, pageInfo)
+    return nodeInfo
   }).filter(Boolean)
 
   figma.ui.postMessage({
