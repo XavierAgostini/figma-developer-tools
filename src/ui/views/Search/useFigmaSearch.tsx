@@ -66,9 +66,8 @@ export const useFigmaSearch = () => {
     let formatedSearchOptions = options.filter(option => SEARCH_OPTIONS.includes(option.value)).map((option) => {
       return { ...option, isSelected: true }
     })
-    
 
-    // Only allow one search option to be selected at a time
+    // Ensure at least one search option is selected
     if (formatedSearchOptions.length > 1) {
       if (selectedOptionMap['text_value_search'] && selectedOptionMap['layer_name_search']) {
         formatedSearchOptions = formatedSearchOptions.filter(option => option.value !== 'text_value_search');
@@ -128,15 +127,6 @@ export const useFigmaSearch = () => {
           return selectedOptionMap['shape']
         }
         return selectedOptionMap['other']
-      }).map(node => {
-        // Only show text value if text search filter is selected
-        if (!selectedOptionMap['text_value_search']) {
-          return {
-            ...node,
-            text: undefined
-          };
-        }
-        return node
       })
 
       return {
@@ -230,12 +220,10 @@ export const useFigmaSearch = () => {
     if (searchInputRef?.current) {
       searchInputRef.current.value = ''
     }
-    // let input = document.getElementsByTagName('input')[0] as HTMLInputElement
-    // input.value = '';
   }
   useEffect(function onDebouncedQueryChange () {
-    window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: { query: debouncedSearchTerm} } }, '*')
-  }, [debouncedSearchTerm])
+    window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: { query: debouncedSearchTerm, layerNameFilterEnabled: selectedOptionMap['layer_name_search'] , textValueFilterEnabled: selectedOptionMap['text_value_search'] } } }, '*')
+  }, [debouncedSearchTerm, selectedOptionMap])
 
   useEffect(function getIntialFigmaPage () {
     window.parent.postMessage({ pluginMessage: { type: 'get-current-page' } }, '*')

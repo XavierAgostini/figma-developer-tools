@@ -1,4 +1,5 @@
 import React from "react";
+import Search from "./views/Search";
 import Selection from './views/Selection';
 import { PluginMessageProvider} from './context/PluginMessages';
 import { Routes, Route } from "react-router-dom";
@@ -13,6 +14,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route index path="/" element={<Selection />} />
+          <Route index path="/search" element={<Search />} />
           <Route path="*" element={<Selection />} />
         </Routes>
       </PluginMessageProvider>

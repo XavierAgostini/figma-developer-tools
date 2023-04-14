@@ -4,7 +4,7 @@
   flex-direction: column;
   border: 1px solid transparent;
 }
-.figmaItem:hover {
+.figmaItem.active, .figmaItem:hover {
   background-color: #18a0fb14;
   border: 1px solid #18a0fb;
 }
@@ -74,8 +74,6 @@
 .detailsTabs {
   display: flex;
   gap: 12px;
-  height: 40px;
-  line-height: 40px;
   padding: 0 8px;
 }
 .detailsTab {

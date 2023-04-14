@@ -24,10 +24,11 @@ interface FigmaPageNodes {
 
 function getNodeInfo(node: BaseNode, pageInfo: FigmaPage, query?: string): FigmaNode {
   let type: string = node.type
-  let text, previewText;
+  let previewText;
+
+  const text = type === 'TEXT' ? (node as TextNode).characters : undefined
 
   if (query !== undefined) {
-    text = type === 'TEXT' ? (node as TextNode).characters : undefined
     previewText = showMatchingText(query, text || '')
   }
    
@@ -75,7 +76,8 @@ function showMatchingText(searchQuery: string, text: string) {
 
 
 
-async function searchFigmaNodes(query: string) {
+async function searchFigmaNodes(input: {query: string; layerNameFilterEnabled: boolean; textValueFilterEnabled: boolean}) {
+  const { query, layerNameFilterEnabled, textValueFilterEnabled } = input;
   if (!query) {
     figma.ui.postMessage({
       type: "figma-search-response",
@@ -116,7 +118,7 @@ async function searchFigmaNodes(query: string) {
   const matchingNodes: FigmaPageNodes[] = figma.root.children.reduce((acc: FigmaPageNodes[], pageNode) => {
     const pageInfo = { id: pageNode.id, name: pageNode.name }
     const nodes = pageNode.findAllWithCriteria({
-      types: ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"],
+      types: layerNameFilterEnabled ? ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"] : ["TEXT"],
     })
       .filter(node => {
         const { name, type } = node
@@ -126,7 +128,7 @@ async function searchFigmaNodes(query: string) {
         }
         return name.toLowerCase().includes(query.toLowerCase())
       })
-      .map(node => getNodeInfo(node, pageInfo))
+      .map(node => getNodeInfo(node, pageInfo, query))
       .filter(Boolean);
     acc.push({
       page: pageInfo,
@@ -260,7 +262,9 @@ type SelectNodeMessage = {
 type FigmaSearchMessage = {
   type: "figma-search";
   data: {
-    query: string
+    query: string;
+    layerNameFilterEnabled: boolean;
+    textValueFilterEnabled: boolean;
   }
 }
 type GenericMessage = {
@@ -319,7 +323,7 @@ figma.ui.onmessage = (msg: PluginMessage) => {
     }
   }
   if (msg.type === 'figma-search') {
-    searchFigmaNodes(msg.data.query)
+    searchFigmaNodes(msg.data)
   }
   if (msg.type === 'get-current-selection') {
     sendCurrentSelection()

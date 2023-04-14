@@ -33,21 +33,8 @@ const Navbar = () => {
         >
           <Icon name='search' color={isSearch ? 'black' : 'black3'}/>
           <Text size='xlarge' weight={isSearch ? 'bold' : 'medium'}>Search</Text>
-          {/* <span className='icon icon--search'/> */}
-          {/* {isSearch && <span>Search</span>} */}
         </div>
       </div>
-      {/* <div className={style.switch} onClick={toggleSwitch}>
-       
-        <input className={style.switchInput} type="checkbox" checked={!isSearch} />
-        <span className={style.slider}>
-        </span>
-      </div> */}
-      {/* <div className="switch">
-        <span className='icon--search'/>
-        <input className="switch__toggle" type="checkbox" id="uniqueId" checked/>
-        <label className="switch__label">Label</label>
-    </div> */}
     </nav>
   )
 }
