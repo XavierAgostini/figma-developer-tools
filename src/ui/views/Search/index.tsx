@@ -33,6 +33,7 @@ const Search = () => {
     <div className={style.container}>
       <div className={style.header}>
         <SearchInput
+          placeholder="Search"
           onChange={onInputChange} 
           searchInputRef={searchInputRef}
         />

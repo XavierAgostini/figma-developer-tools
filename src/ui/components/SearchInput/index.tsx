@@ -3,15 +3,17 @@ import { FigmaSearchIcon } from '../FigmaIcons';
 import style from './style.module.css'
 
 interface SearchInputProps {
+  placeholder: string;
   searchInputRef: React.RefObject<HTMLInputElement>;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
-const SearchInput = ({ searchInputRef, onChange }: SearchInputProps) => {
+const SearchInput = ({ placeholder, searchInputRef, onChange }: SearchInputProps) => {
   useEffect(function enableKeyboardSelectAllShortcut(){
     function handleKeyDown(event: KeyboardEvent) {
       if ((event.metaKey || event.ctrlKey) && event.key === 'a') {
         event.preventDefault();
-        searchInputRef?.current?.select();
+        (event?.target as HTMLInputElement).select()
+        // searchInputRef?.current?.select();
       }
     }
 
@@ -27,7 +29,7 @@ const SearchInput = ({ searchInputRef, onChange }: SearchInputProps) => {
       <input
         ref={searchInputRef}
         className={style.input}
-        placeholder="Search"
+        placeholder={placeholder}
         onChange={onChange}
       />
     </div>

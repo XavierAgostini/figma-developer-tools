@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import ReactJson from 'react-json-view'
 import classNames from 'classnames';
 import { FigmaNode } from '../../types';
@@ -21,7 +21,8 @@ import {
   FigmaWidgetIcon,
   FigmaSliceIcon
 } from '../FigmaIcons'
-import { Button, Input, Label, Text, Title } from "react-figma-plugin-ds"
+import SearchInput from '../SearchInput';
+import { Button, Label, Text } from "react-figma-plugin-ds"
 import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 
@@ -35,6 +36,7 @@ const FigmaItem = (props: Props) => {
   const { activeItemId, handleItemSelected } = useContext(SelectedItemsListContext)
   const { clearSelectedFigmaNodeJSON, selectedFigmaNodeJSON } = useContext(PluginMessageContext)
 
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const toggleShowDetails = () => {
     clearSelectedFigmaNodeJSON()
     scrollToNode(node.id)
@@ -55,7 +57,8 @@ const FigmaItem = (props: Props) => {
     setShowJsonTab(true)
   }
   
-  const onPropertySeach = (query: string) => {
+  const onPropertySeach =  (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
     window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id, query} } }, '*')
   }
 
@@ -182,7 +185,12 @@ const FigmaItem = (props: Props) => {
             )}
             {showJsonTab && (
               <div className={style.propertyDetails}>
-                <Input type="text" icon='search' placeholder="Search Node Properties" onChange={onPropertySeach} className={style.propertySearchInput}/>
+                <SearchInput
+                  searchInputRef={searchInputRef}
+                  placeholder="Search Node Properties"
+                  onChange={onPropertySeach}
+                />
+                {/* <Input type="text" icon='search' placeholder="Search Node Properties" onChange={onPropertySeach} className={style.propertySearchInput}/> */}
                 <ReactJson src={getNodeJSON()} collapsed={1} />
               </div>
             )}

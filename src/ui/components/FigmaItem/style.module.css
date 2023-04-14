@@ -111,6 +111,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 div.detailLabel {
   width: fit-content;
