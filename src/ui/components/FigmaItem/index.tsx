@@ -37,6 +37,7 @@ const FigmaItem = (props: Props) => {
 
   const toggleShowDetails = () => {
     clearSelectedFigmaNodeJSON()
+    scrollToNode(node.id)
     window.parent.postMessage({ pluginMessage: { type: 'get-node-json', data: { id: node.id, query: "" } } }, '*')
     handleItemSelected(node.id)
   }
@@ -158,8 +159,8 @@ const FigmaItem = (props: Props) => {
                 </div>
 
                 <div className={style.btnWrapper}>
-                  <Button onClick={() => scrollToNode(node.id)}>Scroll to Node</Button>
-                  <Button onClick={() => selectNode(node.id)} isSecondary={true}>Select Node</Button>
+                  {/* <Button onClick={() => scrollToNode(node.id)}>Scroll to Node</Button> */}
+                  <Button onClick={() => selectNode(node.id)}>Select Node</Button>
                 </div>
               </>
             )}
