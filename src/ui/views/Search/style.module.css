@@ -30,8 +30,11 @@
   width: fit-content;
   padding: 0;
 }
-.selectMenu {
-  /* width: 150px */
+.selectMenu :global(.select-menu__button:hover .select-menu__caret) {
+  margin-left: -12px !important
+}
+.selectMenu :global(.select-menu__caret) {
+  margin-left: -12px !important;
 }
 .header :global(.input) {
   flex: 1;
@@ -51,6 +54,7 @@
 }
 .pageResultsInfo :global(.select-menu__menu--active) {
   top: 30px !important;
+  width: 125px;
 }
 .noResults {
   height: 100%;
