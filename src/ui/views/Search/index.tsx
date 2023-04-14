@@ -6,7 +6,7 @@ import style from './style.module.css'
 import { Select, Input, Title, Text, Button } from "react-figma-plugin-ds";
 import { SelectedItemsListProvider  } from "../../context/SelectedItemsList"
 import { useFigmaSearch } from './useFigmaSearch'
-
+import SearchInput from '../../components/SearchInput'
 const PAGE_FILTER_LIST = [
   { id: 'CURRENT', name: 'This Page'},
   { id: 'ALL', name: 'All Pages'},
@@ -21,6 +21,7 @@ const Search = () => {
     numResults,
     selectedOptionMap,
     selectedFilterOptions,
+    searchInputRef,
     setSelectedFilterOptions,
     handleSelectFilterOption,
     onInputChange,
@@ -31,12 +32,9 @@ const Search = () => {
   return (
     <div className={style.container}>
       <div className={style.header}>
-        <Input 
-          icon="search"
-          iconColor='black'
-          placeholder='Search'
-          className={style.input2}
+        <SearchInput
           onChange={onInputChange} 
+          searchInputRef={searchInputRef}
         />
         <SearchFilterDropdown
           filterMenuOptions={filterMenuOptions}

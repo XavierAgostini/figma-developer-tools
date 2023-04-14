@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { useDebounce } from '../../hooks/useDebounce'
 import { PluginMessageContext } from '../../context/PluginMessages'
 import { FigmaPageFilter, SelectOption } from '../../types';
@@ -27,12 +27,13 @@ const baseOptions: SelectOption[] = [
 export const useFigmaSearch = () => {
   const [query, setQuery] = useState<string>('')
   const [selectedPageFilter, setSelectedPageFilter] = useState<FigmaPageFilter>("ALL")
-  const [selectedFilterOptions, setSelectedFilterOptions] = useState<SelectOption[]>([baseOptions[0]]);
+  const [selectedFilterOptions, setSelectedFilterOptions] = useState<SelectOption[]>(baseOptions.filter(option => option.isSelected));
 
   const { figmaSearchResults, currentFigmaPage } = useContext(PluginMessageContext)
 
   const debouncedSearchTerm = useDebounce(query, 20);
 
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const selectedOptionMap = selectedFilterOptions.reduce((acc, option) => {
     acc[option.value] = true;
@@ -127,6 +128,15 @@ export const useFigmaSearch = () => {
           return selectedOptionMap['shape']
         }
         return selectedOptionMap['other']
+      }).map(node => {
+        // Only show text value if text search filter is selected
+        if (!selectedOptionMap['text_value_search']) {
+          return {
+            ...node,
+            text: undefined
+          };
+        }
+        return node
       })
 
       return {
@@ -206,8 +216,8 @@ export const useFigmaSearch = () => {
     }
   });
 
-  const onInputChange = (value: string, event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(value)
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setQuery(event.target.value)
   }
 
   const onSelectedPageChange = (option: any) => {
@@ -217,8 +227,11 @@ export const useFigmaSearch = () => {
 
   const clearSearch = () => {
     setQuery('')
-    let input = document.getElementsByTagName('input')[0] as HTMLInputElement
-    input.value = '';
+    if (searchInputRef?.current) {
+      searchInputRef.current.value = ''
+    }
+    // let input = document.getElementsByTagName('input')[0] as HTMLInputElement
+    // input.value = '';
   }
   useEffect(function onDebouncedQueryChange () {
     window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: { query: debouncedSearchTerm} } }, '*')
@@ -237,6 +250,7 @@ export const useFigmaSearch = () => {
     selectedOptionMap,
     filterMenuOptions,
     selectedFilterOptions,
+    searchInputRef,
     setSelectedFilterOptions,
     handleSelectFilterOption,
     onInputChange,

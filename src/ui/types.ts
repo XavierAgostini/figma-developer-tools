@@ -7,6 +7,7 @@ export interface FigmaNode {
   name: string;
   type: string;
   text?: string;
+  previewText?: string;
   page: FigmaPage
 }
 export interface FigmaPageNodes {

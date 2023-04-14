@@ -104,6 +104,9 @@
   align-items: flex-start;
   gap: 8px;
 }
+.detail p {
+  flex: 7;
+}
 .detailsPanel {
   display: flex;
   flex-direction: column;
@@ -112,6 +115,7 @@
 div.detailLabel {
   width: fit-content;
   height: fit-content;
+  flex: 1
 }
 .propertyDetails {
   display: flex;

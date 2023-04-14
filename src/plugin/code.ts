@@ -11,6 +11,7 @@ interface FigmaNode {
   id: string;
   name: string;
   text?: string;
+  previewText?: string;
   type: string;
   page: FigmaPage
 }
@@ -18,6 +19,35 @@ interface FigmaNode {
 interface FigmaPageNodes {
   page: FigmaPage;
   nodes: FigmaNode[]
+}
+
+
+function showMatchingText(searchQuery: string, text: string) {
+  const maxContextLength = 40; // maximum length of neighboring text
+  const maxBeforeLength = 20; // maximum length of characters before the match
+  const queryRegex = new RegExp(searchQuery, 'i'); // create case-insensitive regex for search query
+
+  const matchIndex = text.search(queryRegex); // find index of first match
+  if (matchIndex === -1) {
+    return undefined; // if no match, return null
+  }
+
+  const contextStartIndex = Math.max(0, matchIndex - maxContextLength); // calculate start index of context
+  const contextEndIndex = Math.min(text.length, matchIndex + searchQuery.length + maxContextLength); // calculate end index of context
+
+  let contextText = text.substring(contextStartIndex, contextEndIndex); // extract context text
+  if (contextStartIndex > maxBeforeLength) {
+    contextText = '...' + contextText.substring(contextText.indexOf(' ', contextStartIndex - maxBeforeLength)); // add ellipsis and trim to first space if there is text before match
+  } else if (contextStartIndex > 0) {
+    contextText = '...' + contextText.substring(contextText.indexOf(' ')); // add ellipsis and trim to first space if there is text before match
+  }
+  if (contextEndIndex < text.length) {
+    contextText = contextText.substring(0, contextText.lastIndexOf(' ')) + '...'; // trim to last space and add ellipsis if range doesn't go to end of text
+  }
+
+  // const matchText = contextText.replace(queryRegex, '<mark>$&</mark>'); // highlight match with <mark> tag
+
+  return contextText;
 }
 
 
@@ -75,7 +105,8 @@ async function searchFigmaNodes(query: string) {
       .map(node => {
         const { id, name, type } = node
         const text = type === 'TEXT' ? (node as TextNode).characters : undefined
-        return { id, name, type, page: pageInfo, text }
+        const previewText = showMatchingText(query, text || '')
+        return { id, name, type, page: pageInfo, text, previewText }
       })
       .filter(Boolean);
     acc.push({

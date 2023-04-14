@@ -119,7 +119,7 @@ const FigmaItem = (props: Props) => {
           <div>
             <Text weight='bold' size="large">{node.name}</Text>
             {node.type === 'TEXT' && (
-              <Text size="small">{node.text}</Text>
+              <Text size="small">{node.previewText}</Text>
             )}
           </div>
         </div>
