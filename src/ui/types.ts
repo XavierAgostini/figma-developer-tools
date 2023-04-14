@@ -33,3 +33,11 @@ export interface FigmaPluginMessage {
   }
   origin: string;
 }
+
+export interface SelectOption  {
+  value: string;
+  label: string;
+  icon: React.ReactNode;
+  count?: number;
+  isSelected: boolean;
+}

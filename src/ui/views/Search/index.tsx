@@ -1,60 +1,33 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React from 'react'
 import classNames from 'classnames'
-
+import SearchFilterDropdown from '../../components/SearchFilterDropdown'
 import FigmaPageList from '../../components/FigmaPageList'
-import { useDebounce } from '../../hooks/useDebounce'
-import { FigmaAdjustIcon } from '../../components/FigmaIcons'
-import { PluginMessageContext } from '../../context/PluginMessages'
 import style from './style.module.css'
 import { Select, Input, Title, Text, Button } from "react-figma-plugin-ds";
 import { SelectedItemsListProvider  } from "../../context/SelectedItemsList"
-import { FigmaPageFilter } from '../../types';
+import { useFigmaSearch } from './useFigmaSearch'
+
+const PAGE_FILTER_LIST = [
+  { id: 'CURRENT', name: 'This Page'},
+  { id: 'ALL', name: 'All Pages'},
+]
 
 const Search = () => {
-  const [query, setQuery] = useState<string>('')
-  const [selectedPageFilter, setSelectedPageFilter] = useState<FigmaPageFilter>("ALL")
-  const { figmaSearchResults, currentFigmaPage } = useContext(PluginMessageContext)
-  const debouncedSearchTerm = useDebounce(query, 200);
-
-  const onInputChange = (value: string, event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(value)
-  }
-
-  const onSelectedPageChange = (option: any) => {
-    const pageId = option.value as FigmaPageFilter;
-    setSelectedPageFilter(pageId)
-  }
-  const clearSearch = () => {
-    setQuery('')
-    let input = document.getElementsByClassName(style.input)[0] as HTMLInputElement
-    input.value = '';
-  }
-
-  useEffect(function onDebouncedQueryChange () {
-    window.parent.postMessage({ pluginMessage: { type: 'figma-search', data: { query: debouncedSearchTerm} } }, '*')
-  }, [debouncedSearchTerm])
-  useEffect(function getIntialFigmaPage () {
-    window.parent.postMessage({ pluginMessage: { type: 'get-current-page' } }, '*')
-  }, [])
-
-  const pageList = [
-    { id: 'CURRENT', name: 'This Page'},
-    { id: 'ALL', name: 'All Pages'},
-  ]
-
-  const filteredPageResults = figmaSearchResults.filter(page => {
-    if (selectedPageFilter === 'ALL') {
-      return true
-    }
-    else if (selectedPageFilter === 'CURRENT') {
-      return page.page.id === currentFigmaPage?.id
-    }
-    return false
-  });
-
-  const numResults = filteredPageResults.reduce((acc, page) => {
-    return acc + page.nodes.length
-  }, 0)
+  const {
+    query,
+    filteredNodeResults,
+    filterMenuOptions,
+    resultsByNodeType,
+    numResults,
+    selectedOptionMap,
+    selectedFilterOptions,
+    setSelectedFilterOptions,
+    handleSelectFilterOption,
+    onInputChange,
+    clearSearch,
+    onSelectedPageChange, 
+  } = useFigmaSearch()
+  
   return (
     <div className={style.container}>
       <div className={style.header}>
@@ -62,14 +35,16 @@ const Search = () => {
           icon="search"
           iconColor='black'
           placeholder='Search'
-          className={style.input}
+          className={style.input2}
           onChange={onInputChange} 
         />
-        <Select
-          placeholder=''
-          options={pageList.map(page => ({value: page.id, label: page.name}))}
-          onChange={(e) => console.log('change',e)}
-          onExpand={(e) => console.log('expand',e)}
+        <SearchFilterDropdown
+          filterMenuOptions={filterMenuOptions}
+          handleSelectFilterOption={handleSelectFilterOption}
+          selectedOptionMap={selectedOptionMap}
+          selectedFilterOptions={selectedFilterOptions}
+          setSelectedFilterOptions={setSelectedFilterOptions}
+          resultsByNodeType={resultsByNodeType}
         />
       </div>
      
@@ -80,18 +55,13 @@ const Search = () => {
             placeholder=''
             className={classNames(["select-menu", style.selectMenu])}
             defaultValue={"ALL"}
-            // className='select-menu'
-            // value={selectedPageFilter}
-            options={pageList.map(page => ({value: page.id, label: page.name}))}
-           
+            options={PAGE_FILTER_LIST.map(page => ({value: page.id, label: page.name}))}
             onChange={onSelectedPageChange}
-            // @ts-ignore
-            // onClick={onSelectedPageChange}
           />
         </div>
         {numResults > 0 && (
           <SelectedItemsListProvider>
-            <FigmaPageList pages={filteredPageResults}/>
+            <FigmaPageList pages={filteredNodeResults} />
           </SelectedItemsListProvider>
         )}
         {numResults === 0 && (

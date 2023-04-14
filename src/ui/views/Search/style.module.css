@@ -33,7 +33,7 @@
 .selectMenu {
   /* width: 150px */
 }
-.input {
+.header :global(.input) {
   flex: 1;
 }
 

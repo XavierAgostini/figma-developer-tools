@@ -1,0 +1,42 @@
+/* Option */
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.optionLabel {
+  display: flex;
+  align-items: center;
+  height: 24px;
+  gap: 8px;
+}
+.optionText {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.optionCount {
+  font-size: 10px;
+  color: var(--color-gray-500);
+  padding-right: 4px;
+}
+
+.option svg {
+  width: 12px;
+  fill: #ffffff66;
+}
+.option svg path {
+  fill: #ffffff66;
+  stroke: #ffffff66;
+}
+
+.option svg.checkIcon {
+  width: 8px !important;
+}
+.option svg.checkIcon path {
+  fill: #fff !important;
+  /* stroke: #fff !important; */
+}
