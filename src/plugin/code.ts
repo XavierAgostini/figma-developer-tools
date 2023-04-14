@@ -300,6 +300,10 @@ figma.ui.onmessage = (msg: PluginMessage) => {
   if (msg.type === 'select-node') {
     const node = figma.getNodeById(msg.data.id);
     if (node) {
+      if (node.type === 'PAGE') {
+        figma.currentPage = node
+        return
+      }
       const parentPage = findNodePage(node)
       if (parentPage) {
         figma.currentPage = parentPage

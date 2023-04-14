@@ -36,7 +36,6 @@ const FigmaItem = (props: Props) => {
   const { activeItemId, handleItemSelected } = useContext(SelectedItemsListContext)
   const { clearSelectedFigmaNodeJSON, selectedFigmaNodeJSON } = useContext(PluginMessageContext)
 
-  console.log('hi',activeItemId, node.id)
   const searchInputRef = useRef<HTMLInputElement>(null);
   const toggleShowDetails = () => {
     clearSelectedFigmaNodeJSON()
