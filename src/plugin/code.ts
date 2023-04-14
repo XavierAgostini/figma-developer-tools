@@ -74,9 +74,15 @@ async function searchFigmaNodes(query: string) {
       if (parentPage) {
         const pageInfo = { id: parentPage.id, name: parentPage.name}
         const text = type === 'TEXT' ? (node as TextNode).characters : undefined
+        let nodeType: string = type
+        if (nodeType === 'RECTANGLE') {
+          const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
+
+          if (rectangleContainsImage) nodeType = 'IMAGE'
+        }
         searchResult.push({
           page: pageInfo,
-          nodes: [{ id, name, type, page: pageInfo, text }]
+          nodes: [{ id, name, type: nodeType, page: pageInfo, text }]
         })
       }
     }
@@ -106,6 +112,14 @@ async function searchFigmaNodes(query: string) {
         const { id, name, type } = node
         const text = type === 'TEXT' ? (node as TextNode).characters : undefined
         const previewText = showMatchingText(query, text || '')
+
+        let nodeType: string = type
+        if (nodeType === 'RECTANGLE') {
+          const rectangleContainsImage = ( (node as RectangleNode).fills as ImagePaint[]).some((fill) => fill?.type === 'IMAGE')
+    
+          if (rectangleContainsImage) nodeType = 'IMAGE'
+        }
+
         return { id, name, type, page: pageInfo, text, previewText }
       })
       .filter(Boolean);
