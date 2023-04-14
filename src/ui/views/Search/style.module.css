@@ -64,3 +64,39 @@
   justify-content: center;
   gap: 8px;
 }
+
+/* Tooltip */
+
+.tooltipWrapper {
+  display: flex;
+  align-self: center;
+}
+.helpIcon {
+  width: 12px;
+  height: 12px;
+}
+.tooltip {
+  position: absolute;
+  width: 125px;
+  z-index: 2;
+}
+.tooltipContent {
+  display: flex;
+  gap: 12px;
+}
+.tooltipGroup {
+  width: 125px;
+}
+.tooltipGroup ul {
+  padding: 0;
+  padding-left: 8px;
+  margin: 8px 0;
+}
+.tooltipTitle {
+  font-weight: bold;
+  font-size: 12px;
+}
+.tooltipText {
+  
+  font-size: 11px;
+}
