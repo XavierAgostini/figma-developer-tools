@@ -59,6 +59,7 @@
   padding: 8px 12px;
   gap: 8px;
   background-color: #fff;
+  border-radius: 4px;
 }
 .btnWrapper {
   display: flex;
@@ -95,6 +96,8 @@
 }
 .detail p {
   flex: 7;
+  max-height: 80px;
+  overflow: scroll;
 }
 .detailsPanel {
   display: flex;

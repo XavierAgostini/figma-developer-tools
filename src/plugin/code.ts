@@ -113,23 +113,34 @@ async function searchFigmaNodes(input: {query: string; layerNameFilterEnabled: b
     });
     return
   }
+
+  figma.skipInvisibleInstanceChildren = true
  
   // const matchingNodes = []
   const matchingNodes: FigmaPageNodes[] = figma.root.children.reduce((acc: FigmaPageNodes[], pageNode) => {
     const pageInfo = { id: pageNode.id, name: pageNode.name }
-    const nodes = pageNode.findAllWithCriteria({
-      types: layerNameFilterEnabled ? ["COMPONENT", "FRAME", "GROUP", "INSTANCE", "RECTANGLE", "TEXT", "VECTOR"] : ["TEXT"],
-    })
+    let nodes: FigmaNode[] = [];
+    if (layerNameFilterEnabled) {
+      nodes = pageNode
+        .findAll(({ name,type,id }) => {
+          if (name === undefined) return false
+          return name.toLowerCase().includes(query.toLowerCase())
+        })
+        .map(node => getNodeInfo(node, pageInfo, query))
+    }
+    else if (textValueFilterEnabled) {
+      nodes =  pageNode.findAllWithCriteria({ types: ["TEXT"]})
       .filter(node => {
         const { name, type } = node
         const text = type === 'TEXT' ? (node as TextNode).characters.toLowerCase() : ''
-        if (type === 'TEXT') {
+        if (type === 'TEXT' && textValueFilterEnabled) {
           if (text.includes(query.toLowerCase())) return true
         }
         return name.toLowerCase().includes(query.toLowerCase())
       })
       .map(node => getNodeInfo(node, pageInfo, query))
       .filter(Boolean);
+    } 
     acc.push({
       page: pageInfo,
       nodes

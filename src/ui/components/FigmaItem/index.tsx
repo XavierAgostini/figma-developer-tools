@@ -19,7 +19,11 @@ import {
   FigmaSectionIcon,
   FigmaStickyIcon,
   FigmaWidgetIcon,
-  FigmaSliceIcon
+  FigmaSliceIcon,
+  FigmaTableIcon,
+  FigmaStampIcon,
+  FigmaShapeWithText,
+  FigmaHighlightIcon
 } from '../FigmaIcons'
 import SearchInput from '../SearchInput';
 import { Button, Label, Text } from "react-figma-plugin-ds"
@@ -101,8 +105,16 @@ const FigmaItem = (props: Props) => {
         return <FigmaWidgetIcon />
       case "SLICE":
         return <FigmaSliceIcon />
+      case "TABLE":
+        return <FigmaTableIcon />
+      case "STAMP":
+        return <FigmaStampIcon />
+      case "SHAPE_WITH_TEXT":
+        return <FigmaShapeWithText />
+      case "HIGHLIGHT":
+        return <FigmaHighlightIcon />
       default:
-        return null
+        return <FigmaEllipseIcon />
     }
   }
 
