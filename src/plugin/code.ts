@@ -1,26 +1,7 @@
 // This file holds the main code for the plugin. It has access to the *document*.
 // You can access browser APIs such as the network by creating a UI which contains
 // a full browser environment (see documentation).
-
-
-interface FigmaPage {
-  id: string;
-  name: string;
-}
-interface FigmaNode {
-  id: string;
-  name: string;
-  text?: string;
-  previewText?: string;
-  type: string;
-  page: FigmaPage
-}
-
-interface FigmaPageNodes {
-  page: FigmaPage;
-  nodes: FigmaNode[]
-}
-
+import { FigmaPage, FigmaPageNodes, FigmaNode, PluginMessage } from '../types'
 
 function getNodeInfo(node: BaseNode, pageInfo: FigmaPage, query?: string): FigmaNode {
   let type: string = node.type
@@ -73,8 +54,6 @@ function showMatchingText(searchQuery: string, text: string) {
 
   return contextText;
 }
-
-
 
 async function searchFigmaNodes(input: {query: string; layerNameFilterEnabled: boolean; textValueFilterEnabled: boolean}) {
   const { query, layerNameFilterEnabled, textValueFilterEnabled } = input;
@@ -273,25 +252,6 @@ figma.showUI(__html__, { width: 400, height: 550 }, );
 figma.on("selectionchange", () =>  sendCurrentSelection());
 
 figma.on("currentpagechange", () =>  sendCurrentPage());
-type SelectNodeMessage = {
-  type: "select-node";
-  data: {
-    id: string
-  }
-}
-type FigmaSearchMessage = {
-  type: "figma-search";
-  data: {
-    query: string;
-    layerNameFilterEnabled: boolean;
-    textValueFilterEnabled: boolean;
-  }
-}
-type GenericMessage = {
-  type: string
-  data: any
-}
-type PluginMessage = SelectNodeMessage | FigmaSearchMessage | GenericMessage
 
 function findNodePage(node: any): PageNode | null {
   if (!node) return null;
