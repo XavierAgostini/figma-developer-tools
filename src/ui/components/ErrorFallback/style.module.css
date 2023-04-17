@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+.wrapper {
+  display: flex;
+  margin: auto;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.wrapper h1 {
+  width: fit-content;
+}
+
+.wrapper button {
+  margin-top: 16px;
+  cursor: pointer;
+}
+.closeBtn {
+  color: #fff;
+  background-color: #6e79d6;
+  padding: 8px 12px;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 1px 2px;
+  border-radius: 4px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  cursor: pointer; 
+}
+.closeBtn:hover {
+  opacity: 0.8;
+}

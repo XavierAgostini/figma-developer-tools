@@ -6,6 +6,7 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 export default ({ mode }) => {
   const isPreviewMode = process.env.PREVIEW_MODE === "true"
   return defineConfig({
+    envDir: "../../",
     root: "./src/ui",
     plugins: [react(), viteSingleFile()],
     server: {

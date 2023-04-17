@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import ReactJson from 'react-json-view'
 import classNames from 'classnames';
 import { FigmaNode } from '../../types';
@@ -36,6 +36,7 @@ interface Props {
 const FigmaItem = (props: Props) => {
   const { node } = props
   const [showJsonTab, setShowJsonTab] = useState<boolean>(false)
+  const [showFade, setShowFade] = useState<boolean>(false)
 
   const { activeItemId, handleItemSelected } = useContext(SelectedItemsListContext)
   const { clearSelectedFigmaNodeJSON, selectedFigmaNodeJSON } = useContext(PluginMessageContext)
@@ -129,6 +130,13 @@ const FigmaItem = (props: Props) => {
     }
   }
 
+  useEffect(function animateItemSelected() {
+    // if (activeItemId === node.id) {
+      setShowFade(activeItemId === node.id)
+      // setTimeout(() => setShowFade(false), 300)
+    // }
+  }, [activeItemId, node.id])
+
   return (
     <div 
       className={classNames({
@@ -147,7 +155,7 @@ const FigmaItem = (props: Props) => {
         </div>
       </div>
       {activeItemId === node.id && (
-        <div className={style.details}>
+        <div className={classNames({[style.details]: true, [style.show]: showFade})}>
           <div className={style.detailsTabs}>
             <div
               className={classNames({

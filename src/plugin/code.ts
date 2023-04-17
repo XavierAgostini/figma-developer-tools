@@ -359,5 +359,8 @@ figma.ui.onmessage = (msg: PluginMessage) => {
     const { id, query } = msg.data
     sendNodeJson(id, query)
   }
+  if (msg.type === 'close-plugin') {
+    figma.closePlugin()
+  }
 };
 
