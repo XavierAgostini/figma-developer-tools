@@ -1,3 +1,5 @@
+![image](https://user-images.githubusercontent.com/7476817/235232263-c68ef59d-9e2c-4b14-96cc-b92b84c0b151.png)
+
 # Inspector Plugin
 The ultimate Figma plugin for inspecting and improving your developer workflow. With Inspector, you can effortlessly inspect your Figma layers, search Figma by layer name, text layer value, or by Figma node id to streamline your development process. Say goodbye to the hassle of manually searching for your Figma layers and their properties. Inspector does the heavy lifting for you, so you can focus on what really matters - creating amazing plugins.
 
