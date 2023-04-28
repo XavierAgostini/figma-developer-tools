@@ -5,7 +5,6 @@ import * as Sentry from "@sentry/react";
 
 import App from "./App";
 
-console.log('hi', import.meta.env)
 Sentry.init({
   dsn: `${import.meta.env.VITE_SENTRY_DSN}`,
   integrations: [new Sentry.BrowserTracing()],

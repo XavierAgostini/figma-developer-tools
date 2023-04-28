@@ -68,11 +68,11 @@ export const useFigmaSearch = () => {
     })
 
     // Ensure at least one search option is selected
-    if (formatedSearchOptions.length > 1) {
-      if (selectedOptionMap['text_value_search'] && selectedOptionMap['layer_name_search']) {
+    if (formatedSearchOptions.length == 1) {
+      if (formatedSearchOptions[0].value === 'layer_name_search' && selectedOptionMap['text_value_search'] && selectedOptionMap['layer_name_search']) {
         formatedSearchOptions = formatedSearchOptions.filter(option => option.value !== 'text_value_search');
       }
-      if (selectedOptionMap['layer_name_search'] && selectedOptionMap['text_value_search'] ) {
+      if (formatedSearchOptions[0].value === 'text_value_search' && selectedOptionMap['layer_name_search'] && selectedOptionMap['text_value_search'] ) {
         formatedSearchOptions = formatedSearchOptions.filter(option => option.value !== 'layer_name_search');
       }
     }
