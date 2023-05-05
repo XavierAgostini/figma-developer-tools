@@ -14,7 +14,7 @@
     "build:main": "esbuild src/plugin/code.ts --bundle --outfile=dist/code.js",
     "build:ui": "yarn vite build --minify esbuild --emptyOutDir=false",
     "build:watch": "concurrently -n widget,iframe \"yarn run build:main -- --watch\" \"yarn run build:ui -- --watch\"",
-    "dev": "PREVIEW_MODE=true concurrently -n tsc,build, vite 'yarn:tsc:watch' 'yarn:build:watch' 'ts-node src/devServer/index.ts'",
+    "dev": "PREVIEW_MODE=true concurrently -n tsc,build, vite 'yarn:tsc:watch' 'yarn:build:watch'",
     "preview123": "PREVIEW_MODE=false vite",
     "storybook": "storybook dev",
     "build-storybook": "storybook build"
